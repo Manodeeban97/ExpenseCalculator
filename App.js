@@ -1,0 +1,51 @@
+import {StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import VoiceModal from './src/View/components/VoiceModal';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import GestureModal from './src/View/components/GestureModal';
+import {Provider} from 'react-redux';
+// import store from './store';
+import ListScreen from './src/View/screen/ListScreen';
+import VoiceScreen from './src/View/screen/VoiceScreen';
+import store from './src/store';
+import NewComponent from './src/View/screen/NewComponent';
+// import GestureScreen from './screen/GestureScreen';
+
+const App = () => {
+  const Stack = createNativeStackNavigator();
+  return (
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="ListScreen">
+          <Stack.Screen
+            name="ListScreen"
+            component={ListScreen}
+            options={{headerShown: false}}
+          />
+
+          <Stack.Screen
+            name="VoiceScreen"
+            options={{headerShown: false}}
+            component={VoiceScreen}
+          />
+          <Stack.Screen
+            name="GestureModal"
+            options={{headerShown: false}}
+            component={GestureModal}
+          />
+          <Stack.Screen
+            name="NewComponent"
+            options={{headerShown: false}}
+            component={NewComponent}
+          />
+          {/* <Stack.Screen name="GestureScreen" component={GestureScreen} /> */}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
+  );
+};
+
+export default App;
+
+const styles = StyleSheet.create({});
