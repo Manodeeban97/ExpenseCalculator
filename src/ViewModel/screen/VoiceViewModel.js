@@ -23,10 +23,10 @@ const VoiceViewModel = () => {
       setTitle(voiceData);
     } else if (step === 2) {
       setDate(voiceData);
-    } else if (step === 3) {
-      setAmount(voiceData);
+    } else {
+      null;
     }
-    setStep(prev => (prev + 1) % 4);
+    setStep(prev => (prev + 1) % 3);
   }, [voiceData]);
 
   const VoiceList = [
@@ -46,17 +46,18 @@ const VoiceViewModel = () => {
       // onPressMic: onPressMic,
       // onPressCheck: () => handleSetOperation('setDate'),
     },
-    {
-      title: 'Add Amount',
-      data: amount,
-      voiceData: voiceData,
-      isrecording: isrecording,
-      // onPressMic: onPressMic,
-      // onPressCheck: () => handleSetOperation('setLocation'),
-    },
+    // {
+    //   title: 'Add Amount',
+    //   data: amount,
+    //   voiceData: voiceData,
+    //   isrecording: isrecording,
+    //   // onPressMic: onPressMic,
+    //   // onPressCheck: () => handleSetOperation('setLocation'),
+    // },
   ];
 
   const listItemData = useSelector(state => state.listItem);
+ 
   // const handleSetOperation = operation => {
   //   if (operation == 'setTitle') {
   //     setTitle(voiceData.trim());
@@ -111,8 +112,8 @@ const VoiceViewModel = () => {
   };
 
   const handleAdd = () => {
-    if (title && date && amount) {
-      dispatch(Addlist({title, date, amount}));
+    if (title && date) {
+      dispatch(Addlist({title, date, amount: 0}));
       navigation.navigate('ListScreen');
     }
   };
@@ -127,7 +128,8 @@ const VoiceViewModel = () => {
     isrecording,
     voiceData,
     title,
-    date
+    date,
+    navigation,
   };
 };
 

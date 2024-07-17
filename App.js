@@ -9,7 +9,7 @@ import {Provider} from 'react-redux';
 import ListScreen from './src/View/screen/ListScreen';
 import VoiceScreen from './src/View/screen/VoiceScreen';
 import store from './src/store';
-import NewComponent from './src/View/screen/NewComponent';
+import AddPaymentScreen from './src/View/screen/AddPaymentScreen';
 // import GestureScreen from './screen/GestureScreen';
 
 const App = () => {
@@ -35,9 +35,9 @@ const App = () => {
             component={GestureModal}
           />
           <Stack.Screen
-            name="NewComponent"
+            name="AddPaymentScreen"
             options={{headerShown: false}}
-            component={NewComponent}
+            component={AddPaymentScreen}
           />
           {/* <Stack.Screen name="GestureScreen" component={GestureScreen} /> */}
         </Stack.Navigator>

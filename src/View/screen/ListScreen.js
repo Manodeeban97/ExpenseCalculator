@@ -10,17 +10,24 @@ import React from 'react';
 import {Icon} from 'react-native-elements';
 import ListViewModel from '../../ViewModel/screen/ListViewModel';
 import {ListStyle} from '../StyleSheet/ListStyles';
+import {useNavigation} from '@react-navigation/native';
 
 const ListScreen = () => {
   const ListModel = ListViewModel();
+  const navigation = useNavigation();
+
+  const handleItemPress = item => {
+    console.log(item, 'insideState');
+    navigation.navigate('AddPaymentScreen', {id: item.id});
+  };
 
   return (
     <View style={ListStyle.container} data-testid="listscreen">
-      <View style={{height: '20%', width: '100%',padding:10}}>
+      <View style={{height: '20%', width: '100%', padding: 10}}>
         <Text style={{color: 'black'}}>Welcome to your</Text>
         <View style={{display: 'flex', flexDirection: 'row'}}>
           <Text style={{color: '#c4cfff', fontSize: 30}}>Dash</Text>
-          <Text style={{color: 'lightgray',fontSize: 30}}>Board</Text>
+          <Text style={{color: 'lightgray', fontSize: 30}}>Board</Text>
         </View>
       </View>
       <FlatList
@@ -28,11 +35,13 @@ const ListScreen = () => {
         data={ListModel.listItemData}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => (
-          <View style={ListStyle.listView}>
+          <TouchableOpacity
+            style={ListStyle.listView}
+            onPress={() => handleItemPress(item)}>
             <Text style={{color: 'black'}}>Title: {item.title}</Text>
             <Text style={{color: 'black'}}>Date: {item.date}</Text>
             <Text style={{color: 'black'}}>Amount: {item.amount}</Text>
-          </View>
+          </TouchableOpacity>
         )}
       />
 
@@ -50,6 +59,9 @@ const ListScreen = () => {
       <Modal
         animationType="slide"
         transparent={true}
+        onRequestClose={() =>
+          ListModel.setModalVisible(!ListModel.modalVisible)
+        }
         visible={ListModel.modalVisible}>
         <View style={ListStyle.centeredView}>
           <View style={ListStyle.modalView}>

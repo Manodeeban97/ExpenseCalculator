@@ -6,6 +6,7 @@ import VoiceModal from '../components/VoiceModal';
 import {VoiceStyles} from '../StyleSheet/VoiceStyle';
 import VoiceViewModel from '../../ViewModel/screen/VoiceViewModel';
 
+
 const VoiceScreen = () => {
   const VoiceModel = VoiceViewModel();
 
