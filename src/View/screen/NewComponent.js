@@ -1,179 +1,165 @@
-// import React, {useState, useEffect} from 'react';
-// import {View, Text, FlatList, Button, Alert} from 'react-native';
-// import Voice from '@react-native-voice/voice';
+// ExpenseTracker.js
+import React from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
 
-// const NewComponent = () => {
-//   const [recognizedText, setRecognizedText] = useState('');
-//   const [items, setItems] = useState([]);
-//   const [step, setStep] = useState('title'); // Steps: title, date, amount
-//   const [currentItem, setCurrentItem] = useState({
-//     title: '',
-//     date: '',
-//     amount: '',
-//   });
-
-//   useEffect(() => {
-//     Voice.onSpeechResults = onSpeechResults;
-
-//     return () => {
-//       Voice.destroy().then(Voice.removeAllListeners);
-//     };
-//   }, []);
-
-//   const onSpeechResults = e => {
-//     const text = e.value[0];
-//     setRecognizedText(text);
-//   };
-
-//   const startRecognizing = async () => {
-//     try {
-//       await Voice.start('en-US');
-//     } catch (e) {
-//       console.error(e);
-//     }
-//   };
-
-//   const stopRecognizing = async () => {
-//     try {
-//       await Voice.stop();
-//     } catch (e) {
-//       console.error(e);
-//     }
-//   };
-
-//   const handleNextStep = () => {
-//     stopRecognizing();
-//     switch (step) {
-//       case 'title':
-//         setCurrentItem({...currentItem, title: recognizedText});
-//         setStep('date');
-//         Alert.alert('Next', 'Please say the date.');
-//         break;
-//       case 'date':
-//         setCurrentItem({...currentItem, date: recognizedText});
-//         setStep('amount');
-//         Alert.alert('Next', 'Please say the amount.');
-//         break;
-//       case 'amount':
-//         setCurrentItem({...currentItem, amount: recognizedText});
-//         addItem();
-//         setStep('title');
-//         Alert.alert(
-//           'Done',
-//           'Item added. Please say the title for the next item.',
-//         );
-//         break;
-//     }
-//     setRecognizedText(''); // Clear the recognized text for the next step
-//   };
-
-//   const addItem = () => {
-//     const newItem = {
-//       id: (items.length + 1).toString(),
-//       ...currentItem,
-//       amount: parseFloat(currentItem.amount),
-//     };
-//     setItems([...items, newItem]);
-//     setCurrentItem({title: '', date: '', amount: ''}); // Reset current item
-//   };
-
-//   return (
-//     <View style={{flex: 1, padding: 20}}>
-//       <Button title="Start Recognizing" onPress={startRecognizing} />
-//       <Text style={{color: 'black'}}>Recognized Text: {recognizedText}</Text>
-//       <Button title="Next Step" onPress={handleNextStep} />
-//       <FlatList
-//         data={items}
-//         keyExtractor={item => item.id}
-//         renderItem={({item}) => (
-//           <View style={{padding: 10, borderBottomWidth: 1}}>
-//             <Text style={{color: 'black'}}>Title: {item.title}</Text>
-//             <Text style={{color: 'black'}}>Date: {item.date}</Text>
-//             <Text style={{color: 'black'}}>Amount: ${item.amount}</Text>
-//           </View>
-//         )}
-//       />
-//     </View>
-//   );
-// };
-
-// export default NewComponent;
-
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Button } from 'react-native';
-import Voice from '@react-native-voice/voice';
-
-
-const NewComponent = () => {
-  const [recognizedText, setRecognizedText] = useState('');
-  const [items, setItems] = useState([]);
-  const [step, setStep] = useState(0); // 0: Title, 1: Date, 2: Amount
-  const [newItem, setNewItem] = useState({ title: '', date: '', amount: '' });
-
-  useEffect(() => {
-    Voice.onSpeechResults = onSpeechResults;
-
-    return () => {
-      Voice.destroy().then(Voice.removeAllListeners);
-    };
-  }, []);
-
-  const onSpeechResults = (e) => {
-    const text = e.value[0];
-    setRecognizedText(text);
-  };
-
-  const startRecognizing = async () => {
-    try {
-      await Voice.start('en-US');
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const handleNextStep = () => {
-    if (step === 0) {
-      setNewItem({ ...newItem, title: recognizedText });
-    } else if (step === 1) {
-      setNewItem({ ...newItem, date: recognizedText });
-    } else if (step === 2) {
-      setNewItem({ ...newItem, amount: recognizedText });
-      addItem();
-    }
-    setRecognizedText('');
-    setStep((prevStep) => (prevStep + 1) % 3); // Move to next step, reset to 0 after 2
-  };
-
-  const addItem = () => {
-    const finalItem = {
-      id: (items.length + 1).toString(),
-      ...newItem,
-      amount: parseFloat(newItem.amount.trim())
-    };
-    setItems([...items, finalItem]);
-    setNewItem({ title: '', date: '', amount: '' }); // Reset the new item state
-  };
-
+const ExpenseTracker = () => {
   return (
-    <View style={{ flex: 1, padding: 20 }}>
-      <Button title="Start Recognizing" onPress={startRecognizing} />
-      <Text>Step: {step === 0 ? 'Title' : step === 1 ? 'Date' : 'Amount'}</Text>
-      <Text>Recognized Text: {recognizedText}</Text>
-      <Button title="Next" onPress={handleNextStep} />
-      <FlatList
-        data={items}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={{ padding: 10, borderBottomWidth: 1 }}>
-            <Text>Title: {item.title}</Text>
-            <Text>Date: {item.date}</Text>
-            <Text>Amount: ${item.amount}</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>demo</Text>
+      
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Paid Expense</Text>
+        
+        <View style={styles.expenseItem}>
+          <View>
+            <Text style={styles.expenseText}>ticket</Text>
+            <Text style={styles.categoryText}>Miscellaneous</Text>
           </View>
-        )}
-      />
+          <View style={styles.expenseDetails}>
+            <Text style={styles.amountText}>500</Text>
+            <Text style={styles.paidByText}>Paid by Raja</Text>
+          </View>
+        </View>
+        
+        <View style={styles.expenseItem}>
+          <View>
+            <Text style={styles.expenseText}>snacks</Text>
+            <Text style={styles.categoryText}>Food & Beverages</Text>
+          </View>
+          <View style={styles.expenseDetails}>
+            <Text style={styles.amountText}>300</Text>
+            <Text style={styles.paidByText}>Paid by Mano</Text>
+          </View>
+        </View>
+      </View>
+
+      <Text style={styles.addPaymentTitle}>Add New Payment</Text>
+      
+      <TextInput style={styles.input} placeholder="Please Add the Expense Info" />
+      <TextInput style={styles.input} placeholder="Enter The Expense Amount" />
+      <TextInput style={styles.input} placeholder="Enter the Name" />
+      
+      <View style={styles.input}>
+        <RNPickerSelect
+          onValueChange={(value) => console.log(value)}
+          items={[
+            { label: 'Miscellaneous', value: 'miscellaneous' },
+            { label: 'Food & Beverages', value: 'food_and_beverages' },
+            // Add more categories as needed
+          ]}
+          placeholder={{ label: "Select the Category", value: null }}
+        />
+      </View>
+
+      <View style={styles.fileInput}>
+        <Text style={styles.fileInputText}>Attach the File</Text>
+      </View>
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Split Expense</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Pay Now</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
-export default NewComponent;
+const styles = StyleSheet.create({
+  container: {
+    padding: 16,
+    backgroundColor: '#f5f5f5',
+    flex: 1,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  section: {
+    backgroundColor: '#e6e6fa',
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  expenseItem: {
+    backgroundColor: '#dcdcff',
+    padding: 16,
+    borderRadius: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  expenseText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  categoryText: {
+    fontSize: 14,
+    color: '#666',
+  },
+  expenseDetails: {
+    alignItems: 'flex-end',
+  },
+  amountText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  paidByText: {
+    fontSize: 14,
+    color: '#f00',
+  },
+  addPaymentTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  input: {
+    backgroundColor: '#e6e6fa',
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 8,
+    fontSize: 16,
+  },
+  fileInput: {
+    backgroundColor: '#e6e6fa',
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  fileInputText: {
+    fontSize: 16,
+    color: '#aaa',
+    marginLeft: 8,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  button: {
+    backgroundColor: '#4b7bec',
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    flex: 1,
+    marginHorizontal: 4,
+  },
+  buttonText: {
+    fontSize: 16,
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+});
 
+export default ExpenseTracker;
