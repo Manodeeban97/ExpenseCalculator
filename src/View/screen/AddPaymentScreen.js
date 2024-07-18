@@ -15,13 +15,11 @@ import {FlatList} from 'react-native';
 import PaidExpenseList from '../components/PaidExpenseList';
 import Voice from '@react-native-voice/voice';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  Add_EXPLIST,
-  AddExpList,
-  Addlist,
-  UPDATE_LIST,
-  UpDateList,
-} from '../../Redux/Action';
+import {AddExpList, UpDateList} from '../../Redux/Action';
+import {useNavigation} from '@react-navigation/native';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import Share from 'react-native-share';
+import {generateHTMLContent} from '../../utils/PdfHelper';
 
 const AddPaymentScreen = ({route}) => {
   const [isrecording, setIsRecording] = useState(false);
@@ -34,25 +32,8 @@ const AddPaymentScreen = ({route}) => {
   const [step, setStep] = useState(0);
   const dispatch = useDispatch();
   const ExpData = useSelector(state => state.expData);
-  const {id} = route.params;
-
-  // const data = listItemData.filter(item => item.id === id).map(item => item);
-
-  console.log(ExpData, 'jfjfjf');
-  // const data = [
-  //   {
-  //     expenseinfo: expenseinfo,
-  //     category: 'snacks',
-  //     expAmount: 500,
-  //     name: 'mano',
-  //   },
-  //   {
-  //     expenseinfo: 'ticket',
-  //     category: 'spend',
-  //     expAmount: 600,
-  //     name: 'deeban',
-  //   },
-  // ];
+  const {id, data} = route.params;
+  const navigation = useNavigation();
 
   const initialiseVoice = () => {
     Voice.onSpeechStart = () => setIsRecording(true);
@@ -98,19 +79,25 @@ const AddPaymentScreen = ({route}) => {
       }
     }
   };
+
+  const handleUpdate = id => {
+    const data = ExpData?.filter(item => item.id === id)
+      .map(item => item.amount)
+      .reduce((acc, curr) => {
+        return acc + curr;
+      }, 0);
+    dispatch(UpDateList(id, data));
+  };
+
   const handlePay = () => {
     if (expenseinfo && category && name && expAmount) {
       const amount = parseInt(expAmount);
-      // dispatch({
-      //   type: UPDATE_LIST,
-      //   payload: {id, data},
-      // });
-      // dispatch(UpDateList(id, data));
-      dispatch(AddExpList({id: id, expenseinfo, category, name, amount}));
-      const data = ExpData.map(item => item.amount).reduce((acc, curr) => {
-        return acc + curr;
-      }, 0);
-      dispatch(UpDateList(id, data));
+      // console.log(attachment, 'uhuuuuuuuuft');
+      dispatch(
+        AddExpList({id: id, expenseinfo, category, name, amount, attachment}),
+      );
+      // handleUpdate(id);
+      navigation.navigate('ListScreen');
       setExpenseinfo('');
       setCategory('');
       setAttachment({});
@@ -120,20 +107,67 @@ const AddPaymentScreen = ({route}) => {
     initialiseVoice();
   };
 
-  // useEffect(() => {
-  //   if (ExpData) {
-  //     console.log("trigger")
-  //     const data = ExpData.map(item => item.amount).reduce((acc, curr) => {
-  //       return acc + curr;
-  //     }, 0);
-  //     dispatch(UpDateList(id, data));
-  //   }
-  // }, [ExpData]);
+  useEffect(() => {
+    if (ExpData) {
+      handleUpdate(id);
+    }
+  }, [ExpData]);
 
+  // console.log(ExpData, 'ufhfhfh');
+  const createAndSharePDF = async () => {
+    try {
+      const expenseData = ExpData.filter(item => item.id === id);
+      const attachmentData = expenseData.map(item => item?.attachment);
+      // console.log(attachmentData, 'attachmentData');
+      const htmlContent = await generateHTMLContent(
+        expenseData,
+        attachmentData,
+      );
+      // console.log(expenseData, htmlContent, 'jfhfhjh');
+
+      // Create the PDF
+      const options = {
+        html: htmlContent,
+        fileName: 'ExpenseCalculator',
+        directory: 'Documents',
+      };
+
+      const file = await RNHTMLtoPDF.convert(options);
+
+      // Share the PDF
+      const shareOptions = {
+        title: 'Share PDF',
+        url: `file://${file.filePath}`,
+        type: 'application/pdf',
+      };
+
+      await Share.open(shareOptions);
+    } catch (error) {
+      Alert.alert('Error', 'Failed to create and share PDF');
+      console.error(error);
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>demo</Text>
+      <View
+        style={{
+          paddingTop: 10,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}>
+        <Text style={styles.title}>demo</Text>
+        <View style={{flexDirection: 'row', gap: 20}}>
+          <TouchableOpacity>
+            <Icon name="picture-as-pdf" type="materialicons" color="#5d5bd4" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={createAndSharePDF}
+            disabled={ExpData.filter(item => item.id === id) < 1}>
+            <Icon name="share" type="entypo" color="#5d5bd4" />
+          </TouchableOpacity>
+        </View>
+      </View>
 
       <Text style={styles.sectionTitle}>Paid Expense</Text>
       {ExpData.length !== 0 && (
@@ -191,12 +225,11 @@ const AddPaymentScreen = ({route}) => {
         />
         {/* <Text style={styles.fileInputText}>Attach the File</Text> */}
       </View>
-      <View style={[styles.fileInput, {gap: 180, width: '100%'}]}>
+      <View style={[styles.fileInput, {gap: 180, width: '100%', padding: 10}]}>
         <Text style={{width: 90, color: 'black'}}>
           {isrecording ? 'listening' : voiceData}
         </Text>
         <TouchableOpacity
-          testID="MicButton"
           onPress={onPressMic}
           style={[
             VoiceStyles.MicButton,
@@ -228,6 +261,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
+    marginLeft: 130,
     marginBottom: 16,
   },
   section: {

@@ -6,20 +6,39 @@ import {
   View,
   Modal,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Icon} from 'react-native-elements';
 import ListViewModel from '../../ViewModel/screen/ListViewModel';
 import {ListStyle} from '../StyleSheet/ListStyles';
 import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {UpDateList} from '../../Redux/Action';
 
 const ListScreen = () => {
   const ListModel = ListViewModel();
   const navigation = useNavigation();
+  // const ExpData = useSelector(state => state.expData);
+  // const dispatch = useDispatch();
 
   const handleItemPress = item => {
-    console.log(item, 'insideState');
-    navigation.navigate('AddPaymentScreen', {id: item.id});
+    // console.log(item, 'insideState');
+    // handleUpdate(item.id);
+    navigation.navigate('AddPaymentScreen', {id: item.id, data: item});
   };
+
+  // const handleUpdate = id => {
+  //   const data = ExpData?.filter(item => item.id === id)
+  //     .map(item => item.amount)
+  //     .reduce((acc, curr) => {
+  //       return acc + curr;
+  //     }, 0);
+  //   dispatch(UpDateList(id, data));
+  // };
+  // useEffect(() => {
+  //   if (ExpData < 0) {
+  //     handleUpdate();
+  //   }
+  // }, [ExpData]);
 
   return (
     <View style={ListStyle.container} data-testid="listscreen">

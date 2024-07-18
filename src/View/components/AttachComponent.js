@@ -190,15 +190,20 @@ const PhotoPicker = ({
 
   return (
     <View>
-      <TouchableOpacity style={styles.attachButton} onPress={showPickerOptions}>
+      <TouchableOpacity style={styles.attachButton}>
         <Text style={[styles.text, {color: 'black'}]}>
           {photo?.fileName ? (
-            <CustomTextWithTooltip text={photo?.fileName} maxWords={1} />
+            <CustomTextWithTooltip text={photo?.fileName} maxWords={9} />
           ) : (
             'Attach file'
           )}
         </Text>
-        <Icon name="attach-file" type="materialIcons" size={20} />
+        <Icon
+          name="attach-file"
+          type="materialIcons"
+          size={20}
+          onPress={showPickerOptions}
+        />
       </TouchableOpacity>
       {/* <Button title={buttonTitle} onPress={showPickerOptions} /> */}
     </View>
