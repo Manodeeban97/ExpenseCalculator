@@ -141,6 +141,7 @@ import {
 } from 'react-native';
 import {Icon} from 'react-native-elements';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import CustomTextWithTooltip from './CustomTextWithTooltip';
 
 const PhotoPicker = ({
   buttonTitle = 'Pick a Photo',
@@ -190,13 +191,16 @@ const PhotoPicker = ({
   return (
     <View>
       <TouchableOpacity style={styles.attachButton} onPress={showPickerOptions}>
-        <Text ellipsizeMode={"tail"} te style={[styles.text, {color: 'black'}]}>
-          {photo?.fileName ? photo?.fileName : 'Attach file'}
+        <Text style={[styles.text, {color: 'black'}]}>
+          {photo?.fileName ? (
+            <CustomTextWithTooltip text={photo?.fileName} maxWords={1} />
+          ) : (
+            'Attach file'
+          )}
         </Text>
         <Icon name="attach-file" type="materialIcons" size={20} />
       </TouchableOpacity>
       {/* <Button title={buttonTitle} onPress={showPickerOptions} /> */}
-   
     </View>
   );
 };

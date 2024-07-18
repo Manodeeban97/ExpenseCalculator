@@ -107,6 +107,10 @@ const AddPaymentScreen = ({route}) => {
       // });
       // dispatch(UpDateList(id, data));
       dispatch(AddExpList({id: id, expenseinfo, category, name, amount}));
+      const data = ExpData.map(item => item.amount).reduce((acc, curr) => {
+        return acc + curr;
+      }, 0);
+      dispatch(UpDateList(id, data));
       setExpenseinfo('');
       setCategory('');
       setAttachment({});
@@ -116,14 +120,15 @@ const AddPaymentScreen = ({route}) => {
     initialiseVoice();
   };
 
-  useEffect(() => {
-    if (ExpData) {
-      const data = ExpData.map(item => item.amount).reduce((acc, curr) => {
-        return acc + curr;
-      }, 0);
-      dispatch(UpDateList(id, data));
-    }
-  }, [ExpData]);
+  // useEffect(() => {
+  //   if (ExpData) {
+  //     console.log("trigger")
+  //     const data = ExpData.map(item => item.amount).reduce((acc, curr) => {
+  //       return acc + curr;
+  //     }, 0);
+  //     dispatch(UpDateList(id, data));
+  //   }
+  // }, [ExpData]);
 
 
   return (
