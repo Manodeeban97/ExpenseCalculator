@@ -18,9 +18,9 @@ const VoiceScreen = () => {
       Voice.destroy().then(Voice.removeAllListeners);
     };
   }, []);
-  useEffect(() => {
-    VoiceModel.initialiseVoice();
-  }, [VoiceModel.listItemData]);
+  // useEffect(() => {
+  //   VoiceModel.initialiseVoice();
+  // }, [VoiceModel.listItemData]);
 
   // useEffect(() => {
   //   if (step === 1) {

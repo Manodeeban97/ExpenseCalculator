@@ -1,20 +1,7 @@
 import {Add_EXPLIST, Add_LIST, Add_VOICE, UPDATE_LIST} from '../Redux/Action';
 
 const initialstate = {
-  listItem: [
-    {
-      id: 1,
-      title: 'Tomorrow meeting',
-      date: 'july 10 2024',
-      amount: 0,
-    },
-    {
-      id: 2,
-      title: 'Today meeting',
-      date: 'july 11 2024',
-      amount: 0,
-    },
-  ],
+  listItem: [],
   VoiceData: '',
   expData: [],
 };

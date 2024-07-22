@@ -10,6 +10,7 @@ import ListScreen from './src/View/screen/ListScreen';
 import VoiceScreen from './src/View/screen/VoiceScreen';
 import store from './src/store';
 import AddPaymentScreen from './src/View/screen/AddPaymentScreen';
+import SplitExpenseScreen from './src/View/screen/SplitExpenseScreen';
 // import GestureScreen from './screen/GestureScreen';
 
 const App = () => {
@@ -38,6 +39,11 @@ const App = () => {
             name="AddPaymentScreen"
             options={{headerShown: false}}
             component={AddPaymentScreen}
+          />
+          <Stack.Screen
+            name="SplitExpenseScreen"
+            options={{headerShown: false}}
+            component={SplitExpenseScreen}
           />
           {/* <Stack.Screen name="GestureScreen" component={GestureScreen} /> */}
         </Stack.Navigator>

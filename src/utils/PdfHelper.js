@@ -1,4 +1,3 @@
-import ImageEditor from '@react-native-community/image-editor';
 import RNFS from 'react-native-fs';
 
 export const uriToBase64 = async uri => {

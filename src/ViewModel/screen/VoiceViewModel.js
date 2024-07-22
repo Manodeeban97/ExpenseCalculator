@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import Voice from '@react-native-voice/voice';
 import {Addlist} from '../../Redux/Action';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import { Addlist } from '../../redux/Action';
 // import { Addlist } from '../../redux/Action';
 
@@ -56,8 +57,11 @@ const VoiceViewModel = () => {
     // },
   ];
 
-  const listItemData = useSelector(state => state.listItem);
- 
+  // const existingList = await AsyncStorage.getItem('list');
+  const listItemData = AsyncStorage.getItem('list');
+  console.log(listItemData, 'mano');
+  // const listItemData = useSelector(state => state.listItem);
+
   // const handleSetOperation = operation => {
   //   if (operation == 'setTitle') {
   //     setTitle(voiceData.trim());
@@ -111,10 +115,31 @@ const VoiceViewModel = () => {
     Voice.onSpeechResults = event => setVoiceData(event.value[0]);
   };
 
-  const handleAdd = () => {
+  // const handleAdd = () => {
+  //   if (title && date) {
+  //     dispatch(Addlist({title, date, amount: 0}));
+  //     navigation.navigate('ListScreen');
+  //   }
+  // };
+  const handleAdd = async () => {
     if (title && date) {
-      dispatch(Addlist({title, date, amount: 0}));
-      navigation.navigate('ListScreen');
+      const newItem = {id: Math.random(), title, date, amount: 0};
+
+      try {
+        // Get the existing list from AsyncStorage
+        const existingList = await AsyncStorage.getItem('list');
+        let list = JSON.parse(existingList) || [];
+
+        // Add the new item to the list
+        list.push(newItem);
+        // Save the updated list back to AsyncStorage
+        await AsyncStorage.setItem('list', JSON.stringify(list));
+
+        // Navigate to the ListScreen
+        navigation.navigate('ListScreen');
+      } catch (error) {
+        console.error('Error saving data', error);
+      }
     }
   };
 

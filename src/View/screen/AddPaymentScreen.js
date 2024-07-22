@@ -20,6 +20,7 @@ import {useNavigation} from '@react-navigation/native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Share from 'react-native-share';
 import {generateHTMLContent} from '../../utils/PdfHelper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AddPaymentScreen = ({route}) => {
   const [isrecording, setIsRecording] = useState(false);
@@ -32,6 +33,7 @@ const AddPaymentScreen = ({route}) => {
   const [step, setStep] = useState(0);
   const dispatch = useDispatch();
   const ExpData = useSelector(state => state.expData);
+  const [expenseData, setExpenseData] = useState([]);
   const {id, data} = route.params;
   const navigation = useNavigation();
 
@@ -89,29 +91,71 @@ const AddPaymentScreen = ({route}) => {
   //   dispatch(UpDateList(id, data));
   // };
 
-  const handlePay = () => {
+  // const handlePay = () => {
+  //   if (expenseinfo && category && name && expAmount) {
+  //     const amount = parseInt(expAmount);
+  //     // console.log(attachment, 'uhuuuuuuuuft');
+  //     dispatch(
+  //       AddExpList({id: id, expenseinfo, category, name, amount, attachment}),
+  //     );
+  //     // handleUpdate(id);
+  //     navigation.navigate('ListScreen');
+  //     setExpenseinfo('');
+  //     setCategory('');
+  //     setAttachment({});
+  //     setExpAmount('');
+  //     setName('');
+  //   }
+  //   initialiseVoice();
+  // };
+
+  const handlePay = async () => {
     if (expenseinfo && category && name && expAmount) {
       const amount = parseInt(expAmount);
-      // console.log(attachment, 'uhuuuuuuuuft');
-      dispatch(
-        AddExpList({id: id, expenseinfo, category, name, amount, attachment}),
-      );
-      // handleUpdate(id);
-      navigation.navigate('ListScreen');
-      setExpenseinfo('');
-      setCategory('');
-      setAttachment({});
-      setExpAmount('');
-      setName('');
+      const newExpense = {
+        id: id,
+        expenseinfo,
+        category,
+        name,
+        amount,
+        attachment,
+      };
+
+      try {
+        // Get the existing expenses from AsyncStorage
+        const existingExpenses = await AsyncStorage.getItem('expenses');
+        let expenses = JSON.parse(existingExpenses) || [];
+
+        // Add the new expense to the list
+        expenses.push(newExpense);
+
+        // Save the updated expenses list back to AsyncStorage
+        await AsyncStorage.setItem('expenses', JSON.stringify(expenses));
+
+        // Navigate to the ListScreen
+        navigation.navigate('ListScreen');
+
+        // Reset form fields
+        setExpenseinfo('');
+        setCategory('');
+        setAttachment({});
+        setExpAmount('');
+        setName('');
+      } catch (error) {
+        console.error('Error saving data', error);
+      }
     }
     initialiseVoice();
   };
 
-  // useEffect(() => {
-  //   if (ExpData) {
-  //     handleUpdate(id);
-  //   }
-  // }, [ExpData]);
+  const fetchExpenses = async () => {
+    const existingExpenses = await AsyncStorage.getItem('expenses');
+    let expenses = JSON.parse(existingExpenses) || [];
+    setExpenseData(expenses);
+  };
+  useEffect(() => {
+    fetchExpenses();
+  }, []);
 
   // console.log(ExpData, 'ufhfhfh');
   const createAndSharePDF = async () => {
@@ -148,6 +192,8 @@ const AddPaymentScreen = ({route}) => {
     }
   };
 
+  // console.log(data.title, 'dguhggh');
+
   return (
     <View style={styles.container}>
       <View
@@ -163,18 +209,18 @@ const AddPaymentScreen = ({route}) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={createAndSharePDF}
-            disabled={ExpData.filter(item => item.id === id) < 1}>
+            disabled={expenseData.filter(item => item.id === id) < 1}>
             <Icon name="share" type="entypo" color="#5d5bd4" />
           </TouchableOpacity>
         </View>
       </View>
 
       <Text style={styles.sectionTitle}>Paid Expense</Text>
-      {ExpData.length !== 0 && (
+      {expenseData.length !== 0 && (
         <View style={styles.section}>
           <FlatList
             style={{height: 500}}
-            data={ExpData}
+            data={expenseData}
             keyExtractor={(item, id) => id.toString()}
             renderItem={({item}) =>
               item.id !== id ? null : <PaidExpenseList item={item} />
@@ -239,7 +285,15 @@ const AddPaymentScreen = ({route}) => {
         </TouchableOpacity>
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() =>
+            navigation.navigate('SplitExpenseScreen', {
+              ExpenseId: expenseData.map(item => item.id),
+              expenseinfo: data?.title,
+              expenseData: expenseData,
+            })
+          }>
           <Text style={styles.buttonText}>Split Expense</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handlePay}>

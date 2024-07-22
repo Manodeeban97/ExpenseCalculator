@@ -13,11 +13,14 @@ import {ListStyle} from '../StyleSheet/ListStyles';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {UpDateList} from '../../Redux/Action';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ListScreen = () => {
   const ListModel = ListViewModel();
   const navigation = useNavigation();
   const ExpData = useSelector(state => state.expData);
+  const [listData, setListData] = useState([]);
+  const [explistData, setExpListData] = useState([]);
   const [matchId, setMatchId] = useState('');
   const dispatch = useDispatch();
 
@@ -28,11 +31,13 @@ const ListScreen = () => {
   };
 
   const handleUpdate = () => {
-    const data = ExpData?.filter(item => item.id === matchId)
+    const data = explistData
+      ?.filter(item => item.id === matchId)
       .map(item => item.amount)
       .reduce((acc, curr) => {
         return acc + curr;
       }, 0);
+    console.log(explistData, 'newdata');
     dispatch(UpDateList(matchId, data));
   };
 
@@ -50,18 +55,44 @@ const ListScreen = () => {
     }
   }, [ExpData]);
 
+  const fetchData = async () => {
+    const listItemData = await AsyncStorage.getItem('list');
+    const expData = await AsyncStorage.getItem('expenses');
+    let list = JSON.parse(listItemData) || [];
+    let explist = JSON.parse(expData) || [];
+    setListData(list);
+    setExpListData(explist);
+    // console.log(expData, 'mano');
+  };
+  console.log(
+    explistData.map(item => item.id),
+    listData,
+    'explistData',
+  );
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+  useEffect(() => {
+    if (listData > 1) {
+      fetchData();
+    }
+  }, [listData]);
+
   return (
     <View style={ListStyle.container} data-testid="listscreen">
       <View style={{height: '20%', width: '100%', padding: 10}}>
         <Text style={{color: 'black'}}>Welcome to your</Text>
-        <View style={{display: 'flex', flexDirection: 'row'}}>
-          <Text style={{color: '#c4cfff', fontSize: 30}}>Dash</Text>
-          <Text style={{color: 'lightgray', fontSize: 30}}>Board</Text>
-        </View>
+        <TouchableOpacity onPress={async () => await AsyncStorage.clear()}>
+          <View style={{display: 'flex', flexDirection: 'row'}}>
+            <Text style={{color: '#c4cfff', fontSize: 30}}>Dash</Text>
+            <Text style={{color: 'lightgray', fontSize: 30}}>Board</Text>
+          </View>
+        </TouchableOpacity>
       </View>
       <FlatList
         style={{width: '100%', height: '80%'}}
-        data={ListModel.listItemData}
+        data={listData}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => (
           <TouchableOpacity
