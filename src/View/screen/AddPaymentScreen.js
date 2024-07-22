@@ -80,14 +80,14 @@ const AddPaymentScreen = ({route}) => {
     }
   };
 
-  const handleUpdate = id => {
-    const data = ExpData?.filter(item => item.id === id)
-      .map(item => item.amount)
-      .reduce((acc, curr) => {
-        return acc + curr;
-      }, 0);
-    dispatch(UpDateList(id, data));
-  };
+  // const handleUpdate = id => {
+  //   const data = ExpData?.filter(item => item.id === id)
+  //     .map(item => item.amount)
+  //     .reduce((acc, curr) => {
+  //       return acc + curr;
+  //     }, 0);
+  //   dispatch(UpDateList(id, data));
+  // };
 
   const handlePay = () => {
     if (expenseinfo && category && name && expAmount) {
@@ -107,11 +107,11 @@ const AddPaymentScreen = ({route}) => {
     initialiseVoice();
   };
 
-  useEffect(() => {
-    if (ExpData) {
-      handleUpdate(id);
-    }
-  }, [ExpData]);
+  // useEffect(() => {
+  //   if (ExpData) {
+  //     handleUpdate(id);
+  //   }
+  // }, [ExpData]);
 
   // console.log(ExpData, 'ufhfhfh');
   const createAndSharePDF = async () => {
