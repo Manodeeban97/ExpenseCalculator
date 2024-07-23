@@ -19,8 +19,9 @@ const SplitExpenseScreen = ({route}) => {
       return acc + curr;
     }, 0);
 
-  const splitAmount = (totalAmount / expenseData.length).toFixed(2);
-  const newSplitAmount = (splitAmount / expenseData.length).toFixed(2);
+  const splitAmount = (totalAmount / expenses.length).toFixed(2);
+  // const newSplitAmount = (splitAmount / expenses.length).toFixed(2);
+  console.log(expenses.length,"njfnjjnjngjn")
   //   const addNewExpense = () => {
   //     setExpenses([
   //       ...expense,
@@ -59,6 +60,7 @@ const SplitExpenseScreen = ({route}) => {
   //   console.log(expenses, 'jdjjfjffhf');
 
   const renderItem = ({item, index}) => (
+  
     <View style={styles.row}>
       <TextInput
         style={styles.input}
@@ -67,7 +69,7 @@ const SplitExpenseScreen = ({route}) => {
       />
       <TextInput
         style={styles.input}
-        value={item.isNew ? splitAmount : `-${newSplitAmount}`}
+        value={item.isNew ? splitAmount : `-${item.amount-splitAmount}`}
         editable={false}
       />
       <TextInput
