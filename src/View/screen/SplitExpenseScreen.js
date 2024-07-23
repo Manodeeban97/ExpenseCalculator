@@ -9,34 +9,31 @@ import {
   FlatList,
 } from 'react-native';
 import {Icon} from 'react-native-elements';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import Share from 'react-native-share';
+
+// import { generateHTMLContent } from '../../utils/PdfHelper';
 
 const SplitExpenseScreen = ({route}) => {
   const {ExpenseId, expenseinfo, expenseData} = route.params;
   const [expenses, setExpenses] = useState(expenseData);
+  const [results, setResults] = useState([]);
+
   const totalAmount = expenseData
+    .filter(item => item.id === ExpenseId)
     .map(item => item.amount)
     .reduce((acc, curr) => {
       return acc + curr;
     }, 0);
 
-  const splitAmount = (totalAmount / expenses.length).toFixed(2);
-  // const newSplitAmount = (splitAmount / expenses.length).toFixed(2);
-  console.log(expenses.length,"njfnjjnjngjn")
-  //   const addNewExpense = () => {
-  //     setExpenses([
-  //       ...expense,
-  //       {id: Math.random(), name: '', amount: parseFloat(splitAmount)},
-  //     ]);
-  //   };
-  //   const handleNameChange = (index, name) => {
-  //     const updatedExpenses = [...expense];
-  //     updatedExpenses[index].name = name;
-  //     setExpenses(updatedExpenses);
-  //   };
+  const splitAmount = (
+    totalAmount / expenses.filter(item => item.id === ExpenseId).length
+  ).toFixed(0);
+
   const addNewRow = () => {
     setExpenses([
       ...expenses,
-      {name: '', amount: parseFloat(splitAmount), isNew: true},
+      {id: ExpenseId, amount: parseFloat(splitAmount), isNew: true},
     ]);
   };
 
@@ -49,27 +46,87 @@ const SplitExpenseScreen = ({route}) => {
     );
   };
 
-  // Function to update the name of a new row
   const updateName = (index, name) => {
-    const updatedExpenses = expenses.map((expense, i) =>
-      i === index ? {...expense, name} : expense,
-    );
+    const updatedExpenses = expenses
+      .filter(item => item.id === ExpenseId)
+      .map((expense, i) => {
+        if (i === index && expense.isNew) {
+          return {...expense, name};
+        }
+        return expense;
+      });
     setExpenses(updatedExpenses);
   };
 
-  //   console.log(expenses, 'jdjjfjffhf');
+  // console.log(expenses, 'jdjjfjffhf');
+
+  const calculateResults = () => {
+    const results = expenses
+      .filter(item => item.id === ExpenseId)
+      .map(item => {
+        const balance = item.isNew
+          ? splitAmount
+          : (item.amount - splitAmount).toFixed(0);
+        return {
+          name: item.name || 'Unnamed',
+          paid: item.isNew ? 0 : item.amount,
+          balance: parseFloat(balance),
+        };
+      });
+    setResults(results);
+  };
+
+  const generatePDF = async () => {
+    const htmlContent = `
+      <h1>Movie Expense Calculator</h1>
+      <p>Total: ${totalAmount}</p>
+      <table border="1">
+        <tr>
+          <th>Name</th>
+          <th>Paid</th>
+          <th>Remaining</th>
+        </tr>
+        ${results
+          .map(
+            expense => `
+          <tr>
+            <td>${expense.name}</td>
+            <td>${expense.paid}</td>
+            <td>${expense.balance}</td>
+          </tr>
+        `,
+          )
+          .join('')}
+      </table>
+      <h2>Split Amount:</h2>
+      ${results.map(result => `<p>${result}</p>`).join('')}
+    `;
+
+    const options = {
+      html: htmlContent,
+      fileName: 'ExpenseReport',
+      directory: 'Documents',
+    };
+
+    try {
+      const file = await RNHTMLtoPDF.convert(options);
+      await Share.open({url: `file://${file.filePath}`});
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const renderItem = ({item, index}) => (
-  
     <View style={styles.row}>
       <TextInput
         style={styles.input}
         value={item.name}
         onChangeText={text => updateName(index, text)}
+        editable={item.isNew}
       />
       <TextInput
         style={styles.input}
-        value={item.isNew ? splitAmount : `-${item.amount-splitAmount}`}
+        value={item.isNew ? splitAmount : `-${item.amount - splitAmount}`}
         editable={false}
       />
       <TextInput
@@ -79,22 +136,6 @@ const SplitExpenseScreen = ({route}) => {
       />
     </View>
   );
-
-  //   const renderItem = ({item}) => (
-  //     <View style={styles.row}>
-  //       <TextInput style={styles.input} value={item.name} editable={false} />
-  //       <TextInput
-  //         style={styles.input}
-  //         value={splitAmount.toString()}
-  //         editable={false}
-  //       />
-  //       <TextInput
-  //         style={styles.input}
-  //         value={item.amount.toString()}
-  //         editable={false}
-  //       />
-  //     </View>
-  //   );
 
   return (
     <View style={styles.container}>
@@ -111,7 +152,7 @@ const SplitExpenseScreen = ({route}) => {
         </View>
         <View style={{height: '30%'}}>
           <FlatList
-            data={expenses}
+            data={expenses.filter(item => item.id === ExpenseId)}
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
             contentContainerStyle={{padding: 10}}
@@ -133,11 +174,13 @@ const SplitExpenseScreen = ({route}) => {
         <View style={styles.totalContainer}>
           <Text style={styles.totalText}>Total: {totalAmount}</Text>
           <TouchableOpacity
+            onPress={generatePDF}
             style={{padding: 15, backgroundColor: '#5d5bd4', borderRadius: 25}}>
             <Text style={{color: 'white'}}>Split Request</Text>
           </TouchableOpacity>
         </View>
         <TouchableOpacity
+          onPress={calculateResults}
           style={{
             padding: 15,
             backgroundColor: '#5d5bd4',
@@ -150,13 +193,23 @@ const SplitExpenseScreen = ({route}) => {
         </TouchableOpacity>
 
         <View style={{padding: 10}}>
+          {results
+            .filter(item => item.paid === 0)
+            .map((result, index) => (
+              <Text key={index} style={{color: 'black'}}>
+                {result.name} has to give Rs.{result.balance} to others
+              </Text>
+            ))}
+        </View>
+
+        {/* <View style={{padding: 10}}>
           <Text style={styles.resultText}>
             Balaji has to give Rs.166.67 to Raja
           </Text>
           <Text style={styles.resultText}>
             Balaji has to give Rs.166.66 to Mano
           </Text>
-        </View>
+        </View> */}
       </View>
     </View>
   );

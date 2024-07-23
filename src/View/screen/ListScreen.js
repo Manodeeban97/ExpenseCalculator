@@ -30,15 +30,46 @@ const ListScreen = () => {
     navigation.navigate('AddPaymentScreen', {id: item.id, data: item});
   };
 
-  const handleUpdate = () => {
-    const data = explistData
-      ?.filter(item => item.id === matchId)
-      .map(item => item.amount)
-      .reduce((acc, curr) => {
-        return acc + curr;
-      }, 0);
-    console.log(explistData, 'newdata');
-    dispatch(UpDateList(matchId, data));
+  // const handleUpdate = () => {
+  //   const data = explistData
+  //     ?.filter(item => item.id === matchId)
+  //     .map(item => item.amount)
+  //     .reduce((acc, curr) => {
+  //       return acc + curr;
+  //     }, 0);
+  //   console.log(data, 'newdata');
+  //   dispatch(UpDateList(matchId, data));
+  // };
+  const handleUpdate = async id => {
+    try {
+      // Fetch the existing list from local storage
+      const listString = await AsyncStorage.getItem('list');
+      const list = listString ? JSON.parse(listString) : [];
+
+      // Calculate the new data
+      const data = explistData
+        ?.filter(item => item.id === id)
+        .map(item => item.amount)
+        .reduce((acc, curr) => {
+          return acc + curr;
+        }, 0);
+
+      // Update the item with the matching matchId in the list
+      const updatedList = list.map(item => {
+        if (item.id === id) {
+          return {...item, amount: data};
+        }
+        return item;
+      });
+
+      // Save the updated list back to local storage
+      await AsyncStorage.setItem('list', JSON.stringify(updatedList));
+
+      // Dispatch the update (assuming UpDateList is your action creator)
+      // dispatch(UpDateList(matchId, data));
+    } catch (error) {
+      console.log('Error updating list in local storage: ', error);
+    }
   };
 
   // const handleUpdate = id => {
@@ -50,31 +81,43 @@ const ListScreen = () => {
   //   dispatch(UpDateList(id, data));
   // };
   useEffect(() => {
-    if (ExpData) {
+    if (explistData) {
       handleUpdate(matchId);
     }
-  }, [ExpData]);
+  }, [explistData]);
 
+  // const fetchData = async () => {
+  //   const listItemData = await AsyncStorage.getItem('list');
+  //   const expData = await AsyncStorage.getItem('expenses');
+  //   let list = JSON.parse(listItemData) || [];
+  //   let explist = JSON.parse(expData) || [];
+  //   setListData(list);
+  //   setExpListData(explist);
+  //   // console.log(expData, 'mano');
+  // };
   const fetchData = async () => {
-    const listItemData = await AsyncStorage.getItem('list');
-    const expData = await AsyncStorage.getItem('expenses');
-    let list = JSON.parse(listItemData) || [];
-    let explist = JSON.parse(expData) || [];
-    setListData(list);
-    setExpListData(explist);
-    // console.log(expData, 'mano');
+    try {
+      const listItemData = await AsyncStorage.getItem('list');
+      const expData = await AsyncStorage.getItem('expenses');
+      let list = JSON.parse(listItemData) || [];
+      let explist = JSON.parse(expData) || [];
+      setListData(list);
+      setExpListData(explist);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   };
-  console.log(
-    explistData.map(item => item.id),
-    listData,
-    'explistData',
-  );
+  // console.log(
+  //   explistData.map(item => item.id),
+  //   listData,
+  //   'explistData',
+  // );
 
   useEffect(() => {
     fetchData();
   }, []);
   useEffect(() => {
-    if (listData > 1) {
+    if (listData.length > 1) {
       fetchData();
     }
   }, [listData]);

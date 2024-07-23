@@ -289,7 +289,7 @@ const AddPaymentScreen = ({route}) => {
           style={styles.button}
           onPress={() =>
             navigation.navigate('SplitExpenseScreen', {
-              ExpenseId: expenseData.map(item => item.id),
+              ExpenseId: id,
               expenseinfo: data?.title,
               expenseData: expenseData,
             })

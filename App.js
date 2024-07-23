@@ -10,6 +10,7 @@ import ListScreen from './src/View/screen/ListScreen';
 import VoiceScreen from './src/View/screen/VoiceScreen';
 import store from './src/store';
 import AddPaymentScreen from './src/View/screen/AddPaymentScreen';
+// import SplitExpenseScreen from './src/View/components/NewComponent';
 import SplitExpenseScreen from './src/View/screen/SplitExpenseScreen';
 // import GestureScreen from './screen/GestureScreen';
 
