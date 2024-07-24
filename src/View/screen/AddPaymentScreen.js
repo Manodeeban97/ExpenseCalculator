@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  ScrollView,
 } from 'react-native';
 import CustomSelect from '../components/SelectComponent';
 import {VoiceStyles} from '../StyleSheet/VoiceStyle';
@@ -14,73 +15,76 @@ import AttachComponent from '../components/AttachComponent';
 import {FlatList} from 'react-native';
 import PaidExpenseList from '../components/PaidExpenseList';
 import Voice from '@react-native-voice/voice';
-import {useDispatch, useSelector} from 'react-redux';
-import {AddExpList, UpDateList} from '../../Redux/Action';
-import {useNavigation} from '@react-navigation/native';
-import RNHTMLtoPDF from 'react-native-html-to-pdf';
-import Share from 'react-native-share';
-import {generateHTMLContent} from '../../utils/PdfHelper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import {useDispatch, useSelector} from 'react-redux';
+// import {AddExpList, UpDateList} from '../../Redux/Action';
+// import {useNavigation} from '@react-navigation/native';
+// import RNHTMLtoPDF from 'react-native-html-to-pdf';
+// import Share from 'react-native-share';
+// import {generateHTMLContent} from '../../utils/PdfHelper';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+import AddPaymentViewModel from '../../ViewModel/screen/AddPaymentViewModel';
+import {AddPaymentStyle} from '../StyleSheet/AddPaymentStyles';
 
 const AddPaymentScreen = ({route}) => {
-  const [isrecording, setIsRecording] = useState(false);
-  const [voiceData, setVoiceData] = useState('');
-  const [expenseinfo, setExpenseinfo] = useState('');
-  const [expAmount, setExpAmount] = useState('');
-  const [name, setName] = useState('');
-  const [category, setCategory] = useState('');
-  const [attachment, setAttachment] = useState({});
-  const [step, setStep] = useState(0);
-  const dispatch = useDispatch();
-  const ExpData = useSelector(state => state.expData);
-  const [expenseData, setExpenseData] = useState([]);
+  const AddPaymentModel = AddPaymentViewModel();
+  // const [isrecording, setIsRecording] = useState(false);
+  // const [voiceData, setVoiceData] = useState('');
+  // const [expenseinfo, setExpenseinfo] = useState('');
+  // const [expAmount, setExpAmount] = useState('');
+  // const [name, setName] = useState('');
+  // const [category, setCategory] = useState('');
+  // const [attachment, setAttachment] = useState({});
+  // const [step, setStep] = useState(0);
+  // const dispatch = useDispatch();
+  // const ExpData = useSelector(state => state.expData);
+  // const [expenseData, setExpenseData] = useState([]);
   const {id, data} = route.params;
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
 
-  const initialiseVoice = () => {
-    Voice.onSpeechStart = () => setIsRecording(true);
-    Voice.onSpeechEnd = () => setIsRecording(false);
-    Voice.onSpeechResults = event => setVoiceData(event.value[0]);
-  };
+  // const initialiseVoice = () => {
+  //   Voice.onSpeechStart = () => setIsRecording(true);
+  //   Voice.onSpeechEnd = () => setIsRecording(false);
+  //   Voice.onSpeechResults = event => setVoiceData(event.value[0]);
+  // };
 
   useEffect(() => {
-    initialiseVoice();
+    AddPaymentModel.initialiseVoice();
     return () => {
       Voice.destroy().then(Voice.removeAllListeners);
     };
   }, []);
-  useEffect(() => {
-    if (step === 1) {
-      setExpenseinfo(voiceData);
-    } else if (step === 2) {
-      setExpAmount(voiceData);
-    } else if (step === 3) {
-      setName(voiceData);
-    }
-    setStep(prev => (prev + 1) % 4);
-    // setVoiceData('');
-  }, [voiceData]);
+  // useEffect(() => {
+  //   if (step === 1) {
+  //     setExpenseinfo(voiceData);
+  //   } else if (step === 2) {
+  //     setExpAmount(voiceData);
+  //   } else if (step === 3) {
+  //     setName(voiceData);
+  //   }
+  //   setStep(prev => (prev + 1) % 4);
+  //   // setVoiceData('');
+  // }, [voiceData]);
 
   // useEffect(() => {
   //   VoiceModel.initialiseVoice();
   // }, []);
-  const onPressMic = async () => {
-    if (isrecording) {
-      try {
-        Voice.stop();
-        setIsRecording(false);
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      try {
-        await Voice.start('en-US');
-        setIsRecording(true);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
+  // const onPressMic = async () => {
+  //   if (isrecording) {
+  //     try {
+  //       Voice.stop();
+  //       setIsRecording(false);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   } else {
+  //     try {
+  //       await Voice.start('en-US');
+  //       setIsRecording(true);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  // };
 
   // const handleUpdate = id => {
   //   const data = ExpData?.filter(item => item.id === id)
@@ -109,118 +113,121 @@ const AddPaymentScreen = ({route}) => {
   //   initialiseVoice();
   // };
 
-  const handlePay = async () => {
-    if (expenseinfo && category && name && expAmount) {
-      const amount = parseInt(expAmount);
-      const newExpense = {
-        id: id,
-        expenseinfo,
-        category,
-        name,
-        amount,
-        attachment,
-      };
+  // const handlePay = async () => {
+  //   if (expenseinfo && category && name && expAmount) {
+  //     const amount = parseInt(expAmount);
+  //     const newExpense = {
+  //       id: id,
+  //       expenseinfo,
+  //       category,
+  //       name,
+  //       amount,
+  //       attachment,
+  //     };
 
-      try {
-        // Get the existing expenses from AsyncStorage
-        const existingExpenses = await AsyncStorage.getItem('expenses');
-        let expenses = JSON.parse(existingExpenses) || [];
+  //     try {
+  //       // Get the existing expenses from AsyncStorage
+  //       const existingExpenses = await AsyncStorage.getItem('expenses');
+  //       let expenses = JSON.parse(existingExpenses) || [];
 
-        // Add the new expense to the list
-        expenses.push(newExpense);
+  //       // Add the new expense to the list
+  //       expenses.push(newExpense);
 
-        // Save the updated expenses list back to AsyncStorage
-        await AsyncStorage.setItem('expenses', JSON.stringify(expenses));
+  //       // Save the updated expenses list back to AsyncStorage
+  //       await AsyncStorage.setItem('expenses', JSON.stringify(expenses));
 
-        // Navigate to the ListScreen
-        navigation.navigate('ListScreen');
+  //       // Navigate to the ListScreen
+  //       navigation.navigate('ListScreen');
 
-        // Reset form fields
-        setExpenseinfo('');
-        setCategory('');
-        setAttachment({});
-        setExpAmount('');
-        setName('');
-      } catch (error) {
-        console.error('Error saving data', error);
-      }
-    }
-    initialiseVoice();
-  };
+  //       // Reset form fields
+  //       setExpenseinfo('');
+  //       setCategory('');
+  //       setAttachment({});
+  //       setExpAmount('');
+  //       setName('');
+  //     } catch (error) {
+  //       console.error('Error saving data', error);
+  //     }
+  //   }
+  //   initialiseVoice();
+  // };
 
-  const fetchExpenses = async () => {
-    const existingExpenses = await AsyncStorage.getItem('expenses');
-    let expenses = JSON.parse(existingExpenses) || [];
-    setExpenseData(expenses);
-  };
+  // const fetchExpenses = async () => {
+  //   const existingExpenses = await AsyncStorage.getItem('expenses');
+  //   let expenses = JSON.parse(existingExpenses) || [];
+  //   setExpenseData(expenses);
+  // };
   useEffect(() => {
-    fetchExpenses();
+    AddPaymentModel.fetchExpenses();
+    AddPaymentModel.setListID(id);
   }, []);
 
   // console.log(ExpData, 'ufhfhfh');
-  const createAndSharePDF = async () => {
-    try {
-      const expenseData = ExpData.filter(item => item.id === id);
-      const attachmentData = expenseData.map(item => item?.attachment);
-      // console.log(attachmentData, 'attachmentData');
-      const htmlContent = await generateHTMLContent(
-        expenseData,
-        attachmentData,
-      );
-      // console.log(expenseData, htmlContent, 'jfhfhjh');
+  // const createAndSharePDF = async () => {
+  //   try {
+  //     const expenseData = ExpData.filter(item => item.id === id);
+  //     const attachmentData = expenseData.map(item => item?.attachment);
+  //     // console.log(attachmentData, 'attachmentData');
+  //     const htmlContent = await generateHTMLContent(
+  //       expenseData,
+  //       attachmentData,
+  //     );
+  //     // console.log(expenseData, htmlContent, 'jfhfhjh');
 
-      // Create the PDF
-      const options = {
-        html: htmlContent,
-        fileName: 'ExpenseCalculator',
-        directory: 'Documents',
-      };
+  //     // Create the PDF
+  //     const options = {
+  //       html: htmlContent,
+  //       fileName: 'ExpenseCalculator',
+  //       directory: 'Documents',
+  //     };
 
-      const file = await RNHTMLtoPDF.convert(options);
+  //     const file = await RNHTMLtoPDF.convert(options);
 
-      // Share the PDF
-      const shareOptions = {
-        title: 'Share PDF',
-        url: `file://${file.filePath}`,
-        type: 'application/pdf',
-      };
+  //     // Share the PDF
+  //     const shareOptions = {
+  //       title: 'Share PDF',
+  //       url: `file://${file.filePath}`,
+  //       type: 'application/pdf',
+  //     };
 
-      await Share.open(shareOptions);
-    } catch (error) {
-      Alert.alert('Error', 'Failed to create and share PDF');
-      console.error(error);
-    }
-  };
+  //     await Share.open(shareOptions);
+  //   } catch (error) {
+  //     Alert.alert('Error', 'Failed to create and share PDF');
+  //     console.error(error);
+  //   }
+  // };
 
   // console.log(data.title, 'dguhggh');
 
   return (
-    <View style={styles.container}>
+    <View style={AddPaymentStyle.container}>
       <View
         style={{
           paddingTop: 10,
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>
-        <Text style={styles.title}>demo</Text>
+        <Text style={AddPaymentStyle.title}>demo</Text>
         <View style={{flexDirection: 'row', gap: 20}}>
           <TouchableOpacity>
             <Icon name="picture-as-pdf" type="materialicons" color="#5d5bd4" />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={createAndSharePDF}
-            disabled={expenseData.filter(item => item.id === id) < 1}>
+            onPress={AddPaymentModel.createAndSharePDF}
+            disabled={
+              AddPaymentModel.expenseData.filter(item => item.id === id) < 1
+            }>
             <Icon name="share" type="entypo" color="#5d5bd4" />
           </TouchableOpacity>
         </View>
       </View>
 
-      <Text style={styles.sectionTitle}>Paid Expense</Text>
-      {expenseData.length !== 0 && (
-        <View style={styles.section}>
+      <Text style={AddPaymentStyle.sectionTitle}>Paid Expense</Text>
+      {AddPaymentModel.expenseData.length !== 0 && (
+        <View style={AddPaymentStyle.section}>
           <FlatList
             style={{height: 500}}
-            data={expenseData}
+            data={AddPaymentModel.expenseData}
             keyExtractor={(item, id) => id.toString()}
             renderItem={({item}) =>
               item.id !== id ? null : <PaidExpenseList item={item} />
@@ -229,54 +236,53 @@ const AddPaymentScreen = ({route}) => {
         </View>
       )}
 
-      <Text style={styles.addPaymentTitle}>Add New Payment</Text>
+      <Text style={AddPaymentStyle.addPaymentTitle}>Add New Payment</Text>
 
       <TextInput
-        style={styles.input}
-        value={expenseinfo}
+        style={AddPaymentStyle.input}
+        value={AddPaymentModel.expenseinfo}
         placeholderTextColor={'black'}
         placeholder="Please Add the Expense Info"
       />
       <TextInput
-        style={styles.input}
-        value={expAmount}
+        style={AddPaymentStyle.input}
+        value={AddPaymentModel.expAmount}
         placeholderTextColor={'black'}
         placeholder="Enter The Expense Amount"
       />
       <TextInput
-        style={styles.input}
-        value={name}
+        style={AddPaymentStyle.input}
+        value={AddPaymentModel.name}
         placeholderTextColor={'black'}
         placeholder="Enter the Name"
       />
 
-      <View style={styles.input}>
+      <View style={AddPaymentStyle.input}>
         <CustomSelect
-          onSelect={item => setCategory(item.label)}
-          data={[
-            {label: 'Miscellaneous', value: 'miscellaneous'},
-            {label: 'Food & Beverages', value: 'food_and_beverages'},
-            {label: 'select1', value: 'select1'},
-            {label: 'select2', value: 'select2'},
-            {label: 'select3', value: 'select3'},
-            // Add more categories as needed
-          ]}
+          onSelect={item => AddPaymentModel.setCategory(item.label)}
+          data={AddPaymentModel.SelectData}
           defaultText={'Select Any Category'}
         />
       </View>
 
-      <View style={styles.fileInput}>
+      <View style={AddPaymentStyle.fileInput}>
         <AttachComponent
-          onPhotoPicked={photo => setAttachment(photo, 'photo')}
+          onPhotoPicked={photo => AddPaymentModel.setAttachment(photo, 'photo')}
         />
-        {/* <Text style={styles.fileInputText}>Attach the File</Text> */}
+        {/* <Text style={AddPaymentStyle.fileInputText}>Attach the File</Text> */}
       </View>
-      <View style={[styles.fileInput, {gap: 180, width: '100%', padding: 10}]}>
+      <View
+        style={[
+          AddPaymentStyle.fileInput,
+          {gap: 180, width: '100%', padding: 10},
+        ]}>
         <Text style={{width: 90, color: 'black'}}>
-          {isrecording ? 'listening' : voiceData}
+          {AddPaymentModel.isrecording
+            ? 'listening'
+            : AddPaymentModel.voiceData}
         </Text>
         <TouchableOpacity
-          onPress={onPressMic}
+          onPress={AddPaymentModel.onPressMic}
           style={[
             VoiceStyles.MicButton,
             // {backgroundColor: VoiceModel.isrecording ? 'red' : 'lightgray'},
@@ -284,127 +290,129 @@ const AddPaymentScreen = ({route}) => {
           <Icon name="mic" type="feather" color="#517fa4" />
         </TouchableOpacity>
       </View>
-      <View style={styles.buttonContainer}>
+      <View style={AddPaymentStyle.buttonContainer}>
         <TouchableOpacity
-          style={styles.button}
+          style={AddPaymentStyle.button}
           onPress={() =>
-            navigation.navigate('SplitExpenseScreen', {
+            AddPaymentModel.navigation.navigate('SplitExpenseScreen', {
               ExpenseId: id,
               expenseinfo: data?.title,
-              expenseData: expenseData,
+              // expenseData: AddPaymentModel.expenseData,
             })
           }>
-          <Text style={styles.buttonText}>Split Expense</Text>
+          <Text style={AddPaymentStyle.buttonText}>Split Expense</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handlePay}>
-          <Text style={styles.buttonText}>Pay Now</Text>
+        <TouchableOpacity
+          style={AddPaymentStyle.button}
+          onPress={AddPaymentModel.handlePay}>
+          <Text style={AddPaymentStyle.buttonText}>Pay Now</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    backgroundColor: '#f5f5f5',
-    flex: 1,
-  },
-  title: {
-    color: 'black',
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginLeft: 130,
-    marginBottom: 16,
-  },
-  section: {
-    backgroundColor: '#e6e6fa',
-    padding: 10,
-    height: '25%',
-    borderRadius: 8,
-  },
-  sectionTitle: {
-    color: 'black',
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  expenseItem: {
-    backgroundColor: '#dcdcff',
-    padding: 16,
-    borderRadius: 8,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 8,
-  },
-  expenseText: {
-    color: 'black',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  categoryText: {
-    color: 'black',
-    fontSize: 14,
-    color: '#666',
-  },
-  expenseDetails: {
-    alignItems: 'flex-end',
-  },
-  amountText: {
-    color: 'black',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  paidByText: {
-    fontSize: 14,
-    color: '#f00',
-  },
-  addPaymentTitle: {
-    color: 'black',
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  input: {
-    backgroundColor: '#e6e6fa',
-    padding: 16,
-    borderRadius: 8,
-    marginBottom: 8,
-    fontSize: 16,
-    color: 'black',
-  },
-  fileInput: {
-    backgroundColor: '#e6e6fa',
-    padding: 16,
-    borderRadius: 8,
-    marginBottom: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  fileInputText: {
-    color: 'black',
-    fontSize: 16,
-    color: '#aaa',
-    marginLeft: 8,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  button: {
-    backgroundColor: '#4b7bec',
-    padding: 16,
-    borderRadius: 8,
-    alignItems: 'center',
-    flex: 1,
-    marginHorizontal: 4,
-  },
-  buttonText: {
-    fontSize: 16,
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-});
+// const AddPaymentStyle = StyleSheet.create({
+//   container: {
+//     padding: 16,
+//     backgroundColor: '#f5f5f5',
+//     flex: 1,
+//   },
+//   title: {
+//     color: 'black',
+//     fontSize: 24,
+//     fontWeight: 'bold',
+//     textAlign: 'center',
+//     marginLeft: 130,
+//     marginBottom: 16,
+//   },
+//   section: {
+//     backgroundColor: '#e6e6fa',
+//     padding: 10,
+//     height: '25%',
+//     borderRadius: 8,
+//   },
+//   sectionTitle: {
+//     color: 'black',
+//     fontSize: 18,
+//     fontWeight: 'bold',
+//     marginBottom: 8,
+//   },
+//   expenseItem: {
+//     backgroundColor: '#dcdcff',
+//     padding: 16,
+//     borderRadius: 8,
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//     marginBottom: 8,
+//   },
+//   expenseText: {
+//     color: 'black',
+//     fontSize: 16,
+//     fontWeight: 'bold',
+//   },
+//   categoryText: {
+//     color: 'black',
+//     fontSize: 14,
+//     color: '#666',
+//   },
+//   expenseDetails: {
+//     alignItems: 'flex-end',
+//   },
+//   amountText: {
+//     color: 'black',
+//     fontSize: 16,
+//     fontWeight: 'bold',
+//   },
+//   paidByText: {
+//     fontSize: 14,
+//     color: '#f00',
+//   },
+//   addPaymentTitle: {
+//     color: 'black',
+//     fontSize: 18,
+//     fontWeight: 'bold',
+//     marginBottom: 8,
+//   },
+//   input: {
+//     backgroundColor: '#e6e6fa',
+//     padding: 16,
+//     borderRadius: 8,
+//     marginBottom: 8,
+//     fontSize: 16,
+//     color: 'black',
+//   },
+//   fileInput: {
+//     backgroundColor: '#e6e6fa',
+//     padding: 16,
+//     borderRadius: 8,
+//     marginBottom: 8,
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//   },
+//   fileInputText: {
+//     color: 'black',
+//     fontSize: 16,
+//     color: '#aaa',
+//     marginLeft: 8,
+//   },
+//   buttonContainer: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//   },
+//   button: {
+//     backgroundColor: '#4b7bec',
+//     padding: 16,
+//     borderRadius: 8,
+//     alignItems: 'center',
+//     flex: 1,
+//     marginHorizontal: 4,
+//   },
+//   buttonText: {
+//     fontSize: 16,
+//     color: '#fff',
+//     fontWeight: 'bold',
+//   },
+// });
 
 export default AddPaymentScreen;
