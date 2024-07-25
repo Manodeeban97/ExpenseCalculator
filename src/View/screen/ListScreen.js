@@ -141,9 +141,19 @@ const ListScreen = () => {
           <TouchableOpacity
             style={ListStyle.listView}
             onPress={() => handleItemPress(item)}>
-            <Text style={{color: 'black'}}>Title: {item.title}</Text>
-            <Text style={{color: 'black'}}>Date: {item.date}</Text>
-            <Text style={{color: 'black'}}>Amount: {item.amount}</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                padding: 10,
+                alignItems: 'center',
+              }}>
+              <View>
+                <Text style={{color: 'black'}}>{item.title}</Text>
+                <Text style={{color: '#5d5bd4'}}>{item.date}</Text>
+              </View>
+              <Text style={{color: 'black', fontSize: 16}}>{item.amount}</Text>
+            </View>
           </TouchableOpacity>
         )}
       />
