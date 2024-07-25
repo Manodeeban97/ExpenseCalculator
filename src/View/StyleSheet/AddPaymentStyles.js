@@ -76,6 +76,7 @@ export const AddPaymentStyle = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 8,
     flexDirection: 'row',
+    // justifyContent:"space-between",
     alignItems: 'center',
   },
   fileInputText: {

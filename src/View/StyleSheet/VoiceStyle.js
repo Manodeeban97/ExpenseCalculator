@@ -3,17 +3,15 @@ import {StyleSheet} from 'react-native';
 export const VoiceStyles = StyleSheet.create({
   AddButton: {
     padding: 20,
-    borderRadius: 25,
+    borderRadius: 30,
     alignSelf: 'center',
     backgroundColor: '#5d5bd4',
-    marginBottom: 10,
   },
   MicButton: {
-    padding: 10,
-    backgroundColor: 'lightgray',
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    justifyContent: 'center',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
   },
   CheckButton: {
     padding: 10,
@@ -21,9 +19,9 @@ export const VoiceStyles = StyleSheet.create({
     borderRadius: 25,
   },
   VoiceFooter: {
-    display: 'flex',
+    padding: 10,
     flexDirection: 'row',
-    gap: 100,
+    gap: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -36,11 +34,11 @@ export const VoiceStyles = StyleSheet.create({
     backgroundColor: '#c4cfff',
     color: 'black',
   },
-  VoiceModalContainer:{
+  VoiceModalContainer: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 10,
     backgroundColor: 'white',
-  }
+  },
 });

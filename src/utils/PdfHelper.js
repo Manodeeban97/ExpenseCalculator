@@ -11,7 +11,6 @@ export const uriToBase64 = async uri => {
   }
 };
 
-
 export const generateHTMLContent = async (data, attachments) => {
   const rows = data
     .map(
@@ -24,8 +23,6 @@ export const generateHTMLContent = async (data, attachments) => {
   `,
     )
     .join('');
-
-
 
   let attachmentImages = [];
   for (const [index, dataItem] of data.entries()) {
@@ -40,13 +37,21 @@ export const generateHTMLContent = async (data, attachments) => {
       );
     }
   }
- 
 
   return `
   <html>
     <head>
       <title>Expense Calculator</title>
       <style>
+        body{
+        padding:50px
+         }
+        h1{
+         text-align: center;
+         }
+        h2{
+         text-align: center;
+         }
         table {
           width: 100%;
           border-collapse: collapse;
@@ -54,7 +59,7 @@ export const generateHTMLContent = async (data, attachments) => {
         th, td {
           border: 1px solid black;
           padding: 8px;
-          text-align: left;
+          text-align: center;
         }
         th {
           background-color: #f2f2f2;

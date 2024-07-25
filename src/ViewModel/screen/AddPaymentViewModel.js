@@ -25,7 +25,6 @@ const AddPaymentViewModel = () => {
     {label: 'select1', value: 'select1'},
     {label: 'select2', value: 'select2'},
     {label: 'select3', value: 'select3'},
-    // Add more categories as needed
   ];
 
   const initialiseVoice = () => {
@@ -43,7 +42,6 @@ const AddPaymentViewModel = () => {
       setName(voiceData);
     }
     setStep(prev => (prev + 1) % 4);
-    // setVoiceData('');
   }, [voiceData]);
 
   const onPressMic = async () => {
@@ -79,17 +77,10 @@ const AddPaymentViewModel = () => {
         // Get the existing expenses from AsyncStorage
         const existingExpenses = await AsyncStorage.getItem('expenses');
         let expenses = JSON.parse(existingExpenses) || [];
-
-        // Add the new expense to the list
         expenses.push(newExpense);
-
-        // Save the updated expenses list back to AsyncStorage
         await AsyncStorage.setItem('expenses', JSON.stringify(expenses));
-
-        // Navigate to the ListScreen
         navigation.navigate('ListScreen');
 
-        // Reset form fields
         setExpenseinfo('');
         setCategory('');
         setAttachment(null);
@@ -107,18 +98,13 @@ const AddPaymentViewModel = () => {
     let expenses = JSON.parse(existingExpenses) || [];
     setExpenseData(expenses);
   };
-  //   useEffect(() => {
-  //     fetchExpenses();
-  //   }, []);
 
-  // console.log(ExpData, 'ufhfhfh');
   const createAndSharePDF = async () => {
     try {
       const expense = expenseData.filter(item => item.id === listId);
       const attachmentData = expenseData.map(item => item?.attachment);
       const htmlContent = await generateHTMLContent(expense, attachmentData);
 
-      // Create the PDF
       const options = {
         html: htmlContent,
         fileName: 'ExpenseCalculator',
@@ -127,7 +113,6 @@ const AddPaymentViewModel = () => {
 
       const file = await RNHTMLtoPDF.convert(options);
 
-      // Share the PDF
       const shareOptions = {
         title: 'Share PDF',
         url: `file://${file.filePath}`,

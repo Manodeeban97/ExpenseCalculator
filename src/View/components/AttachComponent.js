@@ -221,7 +221,8 @@ const styles = StyleSheet.create({
   },
   attachButton: {
     flexDirection: 'row',
-    gap: 200,
+    justifyContent: 'space-between',
+    width:"100%"
   },
 });
 

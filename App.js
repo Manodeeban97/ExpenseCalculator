@@ -1,4 +1,10 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import React from 'react';
 import VoiceModal from './src/View/components/VoiceModal';
 import {NavigationContainer} from '@react-navigation/native';
@@ -12,10 +18,12 @@ import store from './src/store';
 import AddPaymentScreen from './src/View/screen/AddPaymentScreen';
 // import SplitExpenseScreen from './src/View/components/NewComponent';
 import SplitExpenseScreen from './src/View/screen/SplitExpenseScreen';
+
 // import GestureScreen from './screen/GestureScreen';
 
 const App = () => {
   const Stack = createNativeStackNavigator();
+
   return (
     <Provider store={store}>
       <NavigationContainer>

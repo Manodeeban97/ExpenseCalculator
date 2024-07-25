@@ -1,4 +1,3 @@
-import {StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
@@ -9,8 +8,6 @@ const SplitExpenseViewModel = () => {
   const [expenseId, setExpenseId] = useState('');
   const [expenseDataSource, setExpenseDataSource] = useState([]);
   const [expenses, setExpenses] = useState(expenseDataSource);
-
-  //   console.log(expenseId,expenses,ExpenseData,"fjhfjf")
 
   const totalAmount = expenses
     .filter(item => item.id === expenseId)
@@ -37,7 +34,6 @@ const SplitExpenseViewModel = () => {
     ]);
   };
 
-  // Function to remove the last added row
   const removeNewRow = () => {
     setExpenseDataSource(
       expenseDataSource.filter(
@@ -59,7 +55,6 @@ const SplitExpenseViewModel = () => {
     setExpenseDataSource(updatedExpenses);
   };
 
-  // console.log(expenses, 'jdjjfjffhf');
   const expenseresults = expenseDataSource
     .filter(item => item.id === expenseId)
     .map(item => {
@@ -81,42 +76,44 @@ const SplitExpenseViewModel = () => {
     if (paidUser.length === unpaidUser.length) {
       for (let i = 0; i < unpaidUser.length; i++) {
         messages.push(
-          `${unpaidUser[i].name} has to pay ${unpaidUser[i].balance} to ${paidUser[i].name}`,
+          `${unpaidUser[i].name} has to pay ${unpaidUser[i].balance.toFixed(
+            0,
+          )} to ${paidUser[i].name}`,
         );
       }
     } else if (unpaidUser.length % 2 !== 0) {
       if (unpaidUser.length > 1) {
         for (let i = 0; i < unpaidUser.length - 1; i++) {
           messages.push(
-            `${unpaidUser[i].name} has to pay ${unpaidUser[i].balance} to ${
-              paidUser[i % paidUser.length].name
-            }`,
+            `${unpaidUser[i].name} has to pay ${unpaidUser[i].balance.toFixed(
+              0,
+            )} to ${paidUser[i % paidUser.length].name}`,
           );
         }
         let lastUser = unpaidUser[unpaidUser.length - 1];
         paidUser.forEach(paid => {
           messages.push(
-            `${lastUser.name} has to pay ${
+            `${lastUser.name} has to pay ${(
               lastUser.balance / paidUser.length
-            } to ${paid.name}`,
+            ).toFixed(0)} to ${paid.name}`,
           );
         });
       } else {
         let lastUser = unpaidUser[unpaidUser.length - 1];
         paidUser.forEach(paid => {
           messages.push(
-            `${lastUser.name} has to pay ${
+            `${lastUser.name} has to pay ${(
               lastUser.balance / paidUser.length
-            } to ${paid.name}`,
+            ).toFixed(0)} to ${paid.name}`,
           );
         });
       }
     } else {
       for (let i = 0; i < unpaidUser.length; i++) {
         messages.push(
-          `${unpaidUser[i].name} has to pay ${unpaidUser[i].balance} to ${
-            paidUser[i % paidUser.length].name
-          }`,
+          `${unpaidUser[i].name} has to pay ${unpaidUser[i].balance.toFixed(
+            0,
+          )} to ${paidUser[i % paidUser.length].name}`,
         );
       }
     }
@@ -126,9 +123,39 @@ const SplitExpenseViewModel = () => {
 
   const generatePDF = async () => {
     const htmlContent = `
+     <html>
+    <head>
+      <title>Split Expense</title>
+      <style>
+        body{
+        padding:50px
+         }
+         h1{
+          text-align: center;
+          }
+      
+         p{
+         text-align: left;
+         }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+        }
+        th, td {
+          border: 1px solid black;
+          padding: 8px;
+          text-align: center;
+        }
+        th {
+          background-color: #f2f2f2;
+        }
+      
+      </style>
+    </head>
+    <body>
       <h1>Movie Expense Calculator</h1>
       <p>Total: ${totalAmount}</p>
-      <table border="1">
+      <table>
         <tr>
           <th>Name</th>
           <th>Paid</th>
@@ -147,7 +174,11 @@ const SplitExpenseViewModel = () => {
           .join('')}
       </table>
       <h2>Split Amount:</h2>
+       <div class="message">
       ${results.map(result => `<p>${result}</p>`).join('')}
+      </div>
+      </body>
+      </html>
     `;
 
     const options = {

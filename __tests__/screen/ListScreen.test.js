@@ -1,6 +1,5 @@
 import React from 'react';
 import {fireEvent, render, waitFor} from '@testing-library/react-native';
-import {useNavigation} from '@react-navigation/native';
 import ListScreen from '../../src/View/screen/ListScreen';
 
 jest.mock('react-native-elements', () => {
@@ -11,6 +10,11 @@ jest.mock('react-native-elements', () => {
 jest.mock('react-redux', () => {
   return {
     useSelector: () => jest.fn(),
+  };
+});
+jest.mock('@react-native-async-storage/async-storage', () => {
+  return {
+    AsyncStorage: () => jest.fn(),
   };
 });
 jest.mock('@tensorflow/tfjs-react-native', () => {
