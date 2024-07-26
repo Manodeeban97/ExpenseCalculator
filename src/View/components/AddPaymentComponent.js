@@ -233,18 +233,21 @@ const AddPaymentComponent = ({route}) => {
 
       <TextInput
         style={AddPaymentStyle.input}
+        onChangeText={text => AddPaymentModel.setExpenseinfo(text)}
         value={AddPaymentModel.expenseinfo}
         placeholderTextColor={'black'}
         placeholder="Please Add the Expense Info"
       />
       <TextInput
         style={AddPaymentStyle.input}
+        onChangeText={text => AddPaymentModel.setExpAmount(text)}
         value={AddPaymentModel.expAmount}
         placeholderTextColor={'black'}
         placeholder="Enter The Expense Amount"
       />
       <TextInput
         style={AddPaymentStyle.input}
+        onChangeText={text => AddPaymentModel.setName(text)}
         value={AddPaymentModel.name}
         placeholderTextColor={'black'}
         placeholder="Enter the Name"
@@ -279,7 +282,6 @@ const AddPaymentComponent = ({route}) => {
           style={[
             VoiceStyles.MicButton,
             {
-                
               backgroundColor: AddPaymentModel.isrecording
                 ? 'red'
                 : 'lightgray',

@@ -9,7 +9,7 @@ export const ListStyle = StyleSheet.create({
     padding: 10,
     backgroundColor: 'white',
   },
-  addTitleBtn:{
+  addTitleBtn: {
     padding: 10,
     width: 150,
     backgroundColor: '#5d5bd4',
@@ -88,5 +88,44 @@ export const ListStyle = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     color: 'black',
+  },
+  listheader: {
+    width: '100%',
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  listheadergif: {
+    resizeMode: 'cover',
+    width: 200,
+    height: 200,
+  },
+  dashboardtext: {display: 'flex', flexDirection: 'row'},
+  currentexpensetext: {
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    padding: 20,
+    marginBottom: 20,
+    paddingLeft: 0,
+    width: '100%',
+  },
+  flatlistcontainer: {width: '100%', height: '80%'},
+  flatlistView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+    paddingLeft: 3,
+    alignItems: 'center',
+  },
+  flatlistViewImg: {
+    resizeMode: 'cover',
+    width: 30,
+    height: 30,
+  },
+  flatlistViewText: {
+    color: 'black',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });

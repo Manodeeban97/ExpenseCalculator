@@ -41,4 +41,23 @@ export const VoiceStyles = StyleSheet.create({
     padding: 10,
     backgroundColor: 'white',
   },
+  inputText: {
+    marginTop: 10,
+    backgroundColor: '#f1f1f1',
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 8,
+    fontSize: 16,
+    color: 'black',
+  },
+  expenseBg: {flex: 1, resizeMode: 'cover'},
+  expenseHeader: {
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginTop: 50,
+    marginBottom: 50,
+  },
+  expenseMainContainer: {height: '100%', padding: 30, gap: 80},
 });

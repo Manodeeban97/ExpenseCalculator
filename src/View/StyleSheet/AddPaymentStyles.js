@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 
 export const AddPaymentStyle = StyleSheet.create({
   container: {
-    padding: 16,
+    padding: 20,
     backgroundColor: '#f5f5f5',
     flex: 1,
   },

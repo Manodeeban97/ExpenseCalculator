@@ -477,3 +477,31 @@
 // // });
 
 // // export default SplitExpenseScreen;
+
+{/* <Modal
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() =>
+          ListModel.setModalVisible(!ListModel.modalVisible)
+        }
+        visible={ListModel.modalVisible}>
+        <View style={ListStyle.centeredView}>
+          <View style={ListStyle.modalView}>
+            <Text style={ListStyle.modalText}>Choose your Mode</Text>
+            <TouchableOpacity
+              style={[
+                ListStyle.button,
+                ListStyle.buttonClose,
+                {marginBottom: 5},
+              ]}
+              onPress={() => ListModel.viewModal('voice')}>
+              <Text style={ListStyle.textStyle}>Voice Mode</Text>
+            </TouchableOpacity>
+            {/* <TouchableOpacity
+              style={[ListStyle.button, ListStyle.buttonClose]}
+              onPress={() => ListModel.viewModal('gesture')}>
+              <Text style={ListStyle.textStyle}>Gesture Mode</Text>
+            </TouchableOpacity> */}
+    //       </View>
+    //     </View>
+    //   </Modal> */}

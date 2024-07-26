@@ -20,7 +20,7 @@ jest.mock('@react-native-async-storage/async-storage', () => {
 jest.mock('@tensorflow/tfjs-react-native', () => {
   return {
     ...jest.requireActual('@tensorflow/tfjs-react-native'),
-    cameraWithTensors:() => ({
+    cameraWithTensors: () => ({
       TensorCamera: jest.fn(),
     }),
   };
@@ -33,6 +33,11 @@ jest.mock('@react-navigation/native', () => {
     }),
   };
 });
+
+
+
+
+
 describe('ListScreen', () => {
   it('it renders correctly listscreen', () => {
     const {getByText} = render(<ListScreen />);
@@ -44,17 +49,15 @@ describe('ListScreen', () => {
     const button = getByTestId('addTitleButton');
     expect(button).toBeTruthy();
     fireEvent.press(button);
-    expect(getByText('Voice Mode')).toBeTruthy();
-    expect(getByText('Gesture Mode')).toBeTruthy();
+    const Voicemodebutton = getByText('Voice Mode');
+    expect(Voicemodebutton).toBeTruthy();
   });
   it('triggering the Voice Mode Button', async () => {
-    const navigate= jest.fn();
     const {getByTestId, getByText} = render(<ListScreen />);
     const button = getByTestId('addTitleButton');
     expect(button).toBeTruthy();
     fireEvent.press(button);
     expect(getByText('Voice Mode')).toBeTruthy();
-    expect(getByText('Gesture Mode')).toBeTruthy();
     const Voicebutton = getByText('Voice Mode');
     fireEvent.press(Voicebutton);
   });

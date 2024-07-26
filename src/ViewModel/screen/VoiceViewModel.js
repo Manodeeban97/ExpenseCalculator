@@ -2,17 +2,25 @@ import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import Voice from '@react-native-voice/voice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { format } from 'date-fns';
 
 const VoiceViewModel = () => {
   const [isrecording, setIsRecording] = useState(false);
   const [voiceData, setVoiceData] = useState('');
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
+  const [openCalendar, setOpenCalendar] = useState(false);
   // const [amount, setAmount] = useState('');
   const [step, setStep] = useState(0);
 
   const navigation = useNavigation();
+
+  const handleDate = (event, selected) => {
+    const currentDate = selected || new Date();
+    const formattedDate = format(currentDate, 'MMM-dd-yyyy');
+    setDate(formattedDate);
+    setOpenCalendar(false);
+  };
 
   useEffect(() => {
     if (step === 1) {
@@ -31,7 +39,6 @@ const VoiceViewModel = () => {
       data: title,
       voiceData: voiceData,
       isrecording: isrecording,
-     
     },
     {
       title: 'Add Date',
@@ -39,11 +46,7 @@ const VoiceViewModel = () => {
       voiceData: voiceData,
       isrecording: isrecording,
     },
-  
   ];
-
-  const listItemData = AsyncStorage.getItem('list');
-  console.log(listItemData, 'mano');
 
   const onPressMic = async () => {
     if (isrecording) {
@@ -57,6 +60,8 @@ const VoiceViewModel = () => {
       try {
         await Voice.start('en-US');
         setIsRecording(true);
+        // setTitle('');
+        // setDate('');
       } catch (error) {
         console.log(error);
       }
@@ -90,11 +95,16 @@ const VoiceViewModel = () => {
     initialiseVoice,
     handleAdd,
     VoiceList,
+    openCalendar,
     isrecording,
     voiceData,
     title,
     date,
     navigation,
+    setTitle,
+    setDate,
+    setOpenCalendar,
+    handleDate,
   };
 };
 

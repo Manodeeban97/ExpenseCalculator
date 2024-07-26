@@ -1,19 +1,12 @@
-import {
-  FlatList,
-  ImageBackground,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ImageBackground, Text, TouchableOpacity, View} from 'react-native';
 import React, {useEffect} from 'react';
 import {Icon} from 'react-native-elements';
 import Voice from '@react-native-voice/voice';
-import VoiceModal from '../components/VoiceModal';
 import {VoiceStyles} from '../StyleSheet/VoiceStyle';
 import VoiceViewModel from '../../ViewModel/screen/VoiceViewModel';
-import {SplitExpenseStyles} from '../StyleSheet/SplitExpenseStyles';
 import {TextInput} from 'react-native';
-import {AddPaymentStyle} from '../StyleSheet/AddPaymentStyles';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
+import { handleVoice } from '../../Redux/Action';
 
 const VoiceScreen = () => {
   const VoiceModel = VoiceViewModel();
@@ -28,18 +21,10 @@ const VoiceScreen = () => {
   return (
     <ImageBackground
       source={require('../../assets/bg_blue.png')}
-      style={{flex: 1, resizeMode: 'cover'}}>
-      <View style={{height: '100%', padding: 30, gap: 80}}>
+      style={VoiceStyles.expenseBg}>
+      <View style={VoiceStyles.expenseMainContainer}>
         <View>
-          <View
-            style={{
-              padding: 10,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-              marginTop: 50,
-              marginBottom: 50,
-            }}>
+          <View style={VoiceStyles.expenseHeader}>
             <Text style={{color: 'black', fontSize: 20, fontWeight: '800'}}>
               Create New Expenses
             </Text>
@@ -49,16 +34,9 @@ const VoiceScreen = () => {
               Enter Expence Type
             </Text>
             <TextInput
-              style={{
-                marginTop: 10,
-                backgroundColor: '#f1f1f1',
-                padding: 16,
-                borderRadius: 8,
-                marginBottom: 8,
-                fontSize: 16,
-                color: 'black',
-              }}
+              style={VoiceStyles.inputText}
               value={VoiceModel.title}
+              onChangeText={text => VoiceModel.setTitle(text)}
               placeholderTextColor={'black'}
               placeholder="Enter Expence Type"
             />
@@ -67,20 +45,46 @@ const VoiceScreen = () => {
             <Text style={{color: 'black', fontSize: 16, fontWeight: '500'}}>
               Date
             </Text>
-            <TextInput
-              style={{
-                marginTop: 10,
-                backgroundColor: '#f1f1f1',
-                padding: 16,
-                borderRadius: 8,
-                marginBottom: 8,
-                fontSize: 16,
-                color: 'black',
-              }}
+            <View
+              style={[
+                VoiceStyles.inputText,
+                {
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                },
+              ]}>
+              <TextInput
+                style={{color: 'black'}}
+                value={VoiceModel.date}
+                onChangeText={text => VoiceModel.setDate(text)}
+                placeholderTextColor={'black'}
+                placeholder="Enter The Date"
+              />
+              <TouchableOpacity
+                onPress={() => VoiceModel.setOpenCalendar(true)}>
+                <Icon
+                  name="calendar-today"
+                  type="materialicons"
+                  size={20}
+                  color="gray"
+                />
+              </TouchableOpacity>
+            </View>
+            {VoiceModel.openCalendar && (
+              <RNDateTimePicker
+                mode="date"
+                value={new Date()}
+                onChange={VoiceModel.handleDate}
+              />
+            )}
+            {/* <TextInput
+              style={VoiceStyles.inputText}
               value={VoiceModel.date}
+              onChangeText={text => VoiceModel.setDate(text)}
               placeholderTextColor={'black'}
               placeholder="Enter The Date"
-            />
+            /> */}
           </View>
         </View>
         {/* <Text

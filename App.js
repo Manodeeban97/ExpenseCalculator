@@ -18,6 +18,7 @@ import store from './src/store';
 import AddPaymentScreen from './src/View/screen/AddPaymentScreen';
 // import SplitExpenseScreen from './src/View/components/NewComponent';
 import SplitExpenseScreen from './src/View/screen/SplitExpenseScreen';
+import {StatusBar} from 'react-native';
 
 // import GestureScreen from './screen/GestureScreen';
 
@@ -26,6 +27,7 @@ const App = () => {
 
   return (
     <Provider store={store}>
+      <StatusBar translucent={true} backgroundColor={"transparent"} barStyle={"dark-content"} />
       <NavigationContainer>
         <Stack.Navigator initialRouteName="ListScreen">
           <Stack.Screen

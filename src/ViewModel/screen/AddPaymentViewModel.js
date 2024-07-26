@@ -144,6 +144,9 @@ const AddPaymentViewModel = () => {
     setAttachment,
     setListID,
     SelectData,
+    setExpenseinfo,
+    setExpAmount,
+    setName,
   };
 };
 

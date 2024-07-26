@@ -12,14 +12,8 @@ const ListViewModel = () => {
 
   const navigation = useNavigation();
 
-  const viewModal = type => {
-    if (type === 'voice') {
-      navigation.navigate('VoiceScreen');
-      setModalVisible(false);
-    } else {
-      navigation.navigate('GestureModal');
-      setModalVisible(false);
-    }
+  const viewModal = () => {
+    navigation.navigate('VoiceScreen');
   };
   const handleItemPress = item => {
     setMatchId(item.id);

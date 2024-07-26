@@ -51,12 +51,32 @@ export const SplitExpenseStyles = StyleSheet.create({
     color: 'white',
   },
   splitButton: {
-    marginVertical: 10,
+    padding: 15,
+    backgroundColor: '#5d5bd4',
+    borderRadius: 25,
+    width: 100,
+    alignItems: 'center',
+    marginLeft: 10,
   },
   resultText: {
     fontSize: 16,
     marginTop: 10,
     fontWeight: 'bold',
     color: 'black',
+  },
+  splitrequest: {
+    padding: 15,
+    backgroundColor: '#5d5bd4',
+    borderRadius: 25,
+  },
+  addremovecontainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+  },
+  splitAmountcontainer: {
+    flexDirection: 'row',
+    padding: 10,
+    justifyContent: 'space-between',
   },
 });

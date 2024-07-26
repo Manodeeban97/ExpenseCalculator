@@ -54,12 +54,7 @@ const SplitExpenseScreen = ({route}) => {
       <View style={SplitExpenseStyles.container}>
         <Text style={SplitExpenseStyles.header}>Split the Expenses</Text>
         <View style={SplitExpenseStyles.splitContainer}>
-          <View
-            style={{
-              flexDirection: 'row',
-              padding: 10,
-              justifyContent: 'space-between',
-            }}>
+          <View style={SplitExpenseStyles.splitAmountcontainer}>
             <Text style={{color: 'black'}}>{expenseinfo}</Text>
             <Text style={{color: 'black'}}>
               Split Amount: {SplitEXpenseModel.splitAmount}
@@ -75,12 +70,7 @@ const SplitExpenseScreen = ({route}) => {
               contentContainerStyle={{padding: 10}}
             />
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              padding: 10,
-            }}>
+          <View style={SplitExpenseStyles.addremovecontainer}>
             <TouchableOpacity onPress={SplitEXpenseModel.removeNewRow}>
               <Icon name="minuscircle" type="antdesign" color="black" />
             </TouchableOpacity>
@@ -94,24 +84,13 @@ const SplitExpenseScreen = ({route}) => {
             </Text>
             <TouchableOpacity
               onPress={SplitEXpenseModel.generatePDF}
-              style={{
-                padding: 15,
-                backgroundColor: '#5d5bd4',
-                borderRadius: 25,
-              }}>
+              style={SplitExpenseStyles.splitrequest}>
               <Text style={{color: 'white'}}>Split Request</Text>
             </TouchableOpacity>
           </View>
           <TouchableOpacity
             onPress={SplitEXpenseModel.calculateResults}
-            style={{
-              padding: 15,
-              backgroundColor: '#5d5bd4',
-              borderRadius: 25,
-              width: 100,
-              alignItems: 'center',
-              marginLeft: 10,
-            }}>
+            style={SplitExpenseStyles.splitButton}>
             <Text style={{color: 'white'}}>Split</Text>
           </TouchableOpacity>
 
