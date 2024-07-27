@@ -1,0 +1,528 @@
+<html><head><meta charset="utf-8"/><title>Test Report</title><style type="text/css">html,
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1rem;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+body {
+  padding: 2rem 1rem;
+  font-size: 0.85rem;
+}
+.jesthtml-content {
+  margin: 0 auto;
+  max-width: 70rem;
+}
+header {
+  display: flex;
+  align-items: center;
+}
+#title {
+  margin: 0;
+  flex-grow: 1;
+}
+#logo {
+  height: 4rem;
+}
+#timestamp {
+  color: #777;
+  margin-top: 0.5rem;
+}
+
+/** SUMMARY */
+#summary {
+  color: #333;
+  margin: 2rem 0;
+  display: flex;
+  font-family: monospace;
+  font-size: 1rem;
+}
+#summary > div {
+  margin-right: 2rem;
+  background: #eee;
+  padding: 1rem;
+  min-width: 15rem;
+}
+#summary > div:last-child {
+  margin-right: 0;
+}
+@media only screen and (max-width: 720px) {
+  #summary {
+    flex-direction: column;
+  }
+  #summary > div {
+    margin-right: 0;
+    margin-top: 2rem;
+  }
+  #summary > div:first-child {
+    margin-top: 0;
+  }
+}
+
+.summary-total {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+.summary-passed {
+  color: #4f8a10;
+  border-left: 0.4rem solid #4f8a10;
+  padding-left: 0.5rem;
+}
+.summary-failed,
+.summary-obsolete-snapshots {
+  color: #d8000c;
+  border-left: 0.4rem solid #d8000c;
+  padding-left: 0.5rem;
+}
+.summary-pending {
+  color: #9f6000;
+  border-left: 0.4rem solid #9f6000;
+  padding-left: 0.5rem;
+}
+.summary-empty {
+  color: #999;
+  border-left: 0.4rem solid #999;
+}
+
+.test-result {
+  padding: 1rem;
+  margin-bottom: 0.25rem;
+}
+.test-result:last-child {
+  border: 0;
+}
+.test-result.passed {
+  background-color: #dff2bf;
+  color: #4f8a10;
+}
+.test-result.failed {
+  background-color: #ffbaba;
+  color: #d8000c;
+}
+.test-result.pending {
+  background-color: #ffdf61;
+  color: #9f6000;
+}
+
+.test-info {
+  display: flex;
+  justify-content: space-between;
+}
+.test-suitename {
+  width: 20%;
+  text-align: left;
+  font-weight: bold;
+  word-break: break-word;
+}
+.test-title {
+  width: 40%;
+  text-align: left;
+  font-style: italic;
+}
+.test-status {
+  width: 20%;
+  text-align: right;
+}
+.test-duration {
+  width: 10%;
+  text-align: right;
+  font-size: 0.75rem;
+}
+
+.failureMessages {
+  padding: 0 1rem;
+  margin-top: 1rem;
+  border-top: 1px dashed #d8000c;
+}
+.failureMessages.suiteFailure {
+  border-top: none;
+}
+.failureMsg {
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+
+.suite-container {
+  margin-bottom: 2rem;
+}
+.suite-container > input[type="checkbox"] {
+  position: absolute;
+  left: -100vw;
+}
+.suite-container label {
+  display: block;
+}
+.suite-container .suite-tests {
+  overflow-y: hidden;
+  height: 0;
+}
+.suite-container > input[type="checkbox"]:checked ~ .suite-tests {
+  height: auto;
+  overflow: visible;
+}
+.suite-info {
+  padding: 1rem;
+  background-color: #eee;
+  color: #777;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+.suite-info:hover {
+  background-color: #ddd;
+  cursor: pointer;
+}
+.suite-info .suite-path {
+  word-break: break-all;
+  flex-grow: 1;
+  font-family: monospace;
+  font-size: 1rem;
+}
+.suite-info .suite-time {
+  margin-left: 0.5rem;
+  padding: 0.2rem 0.3rem;
+  font-size: 0.75rem;
+}
+.suite-info .suite-time.warn {
+  background-color: #d8000c;
+  color: #fff;
+}
+.suite-info:before {
+  content: "\2303";
+  display: inline-block;
+  margin-right: 0.5rem;
+  transform: rotate(0deg);
+}
+.suite-container > input[type="checkbox"]:checked ~ label .suite-info:before {
+  transform: rotate(180deg);
+}
+
+/* CONSOLE LOGS */
+.suite-consolelog {
+  margin-bottom: 0.25rem;
+  padding: 1rem;
+  background-color: #efefef;
+}
+.suite-consolelog-header {
+  font-weight: bold;
+}
+.suite-consolelog-item {
+  padding: 0.5rem;
+}
+.suite-consolelog-item pre {
+  margin: 0.5rem 0;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+.suite-consolelog-item-origin {
+  color: #777;
+  font-weight: bold;
+}
+.suite-consolelog-item-message {
+  color: #000;
+  font-size: 1rem;
+  padding: 0 0.5rem;
+}
+
+/* OBSOLETE SNAPSHOTS */
+.suite-obsolete-snapshots {
+  margin-bottom: 0.25rem;
+  padding: 1rem;
+  background-color: #ffbaba;
+  color: #d8000c;
+}
+.suite-obsolete-snapshots-header {
+  font-weight: bold;
+}
+.suite-obsolete-snapshots-item {
+  padding: 0.5rem;
+}
+.suite-obsolete-snapshots-item pre {
+  margin: 0.5rem 0;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+.suite-obsolete-snapshots-item-message {
+  color: #000;
+  font-size: 1rem;
+  padding: 0 0.5rem;
+}
+</style></head><body><div class="jesthtml-content"><header><h1 id="title">Test Report</h1></header><div id="metadata-container"><div id="timestamp">Started: 2024-07-27 19:00:11</div><div id="summary"><div id="suite-summary"><div class="summary-total">Suites (3)</div><div class="summary-passed ">2 passed</div><div class="summary-failed ">1 failed</div><div class="summary-pending  summary-empty">0 pending</div></div><div id="test-summary"><div class="summary-total">Tests (6)</div><div class="summary-passed ">5 passed</div><div class="summary-failed ">1 failed</div><div class="summary-pending  summary-empty">0 pending</div></div></div></div><div id="suite-1" class="suite-container"><input id="collapsible-0" type="checkbox" class="toggle" checked="checked"/><label for="collapsible-0"><div class="suite-info"><div class="suite-path">D:\react native project\task1\__tests__\screen\ListScreen.test.js</div><div class="suite-time">1.261s</div></div></label><div class="suite-tests"><div class="test-result passed"><div class="test-info"><div class="test-suitename">ListScreen</div><div class="test-title">it renders correctly listscreen</div><div class="test-status">passed</div><div class="test-duration">0.521s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">ListScreen</div><div class="test-title">triggering the AddTitle Button</div><div class="test-status">passed</div><div class="test-duration">0.006s</div></div></div></div><div class="suite-consolelog"><div class="suite-consolelog-header">Console Log</div><div class="suite-consolelog-item"><pre class="suite-consolelog-item-origin">    at Object.error (D:\react native project\task1\src\ViewModel\screen\ListViewModel.js:55:15)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (D:\react native project\task1\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (D:\react native project\task1\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)</pre><pre class="suite-consolelog-item-message">Error fetching data: SyntaxError: "undefined" is not valid JSON
+    at JSON.parse (&lt;anonymous&gt;)
+    at Object.parse (D:\react native project\task1\src\ViewModel\screen\ListViewModel.js:50:23)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (D:\react native project\task1\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (D:\react native project\task1\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)</pre></div><div class="suite-consolelog-item"><pre class="suite-consolelog-item-origin">    at Object.error (D:\react native project\task1\src\ViewModel\screen\ListViewModel.js:55:15)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (D:\react native project\task1\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (D:\react native project\task1\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</pre><pre class="suite-consolelog-item-message">Error fetching data: SyntaxError: "undefined" is not valid JSON
+    at JSON.parse (&lt;anonymous&gt;)
+    at Object.parse (D:\react native project\task1\src\ViewModel\screen\ListViewModel.js:50:23)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (D:\react native project\task1\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (D:\react native project\task1\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</pre></div></div></div><div id="suite-2" class="suite-container"><input id="collapsible-1" type="checkbox" class="toggle" checked="checked"/><label for="collapsible-1"><div class="suite-info"><div class="suite-path">D:\react native project\task1\__tests__\screen\VoiceScreen.test.js</div><div class="suite-time">1.41s</div></div></label><div class="suite-tests"><div class="test-result passed"><div class="test-info"><div class="test-suitename">VoiceScreen</div><div class="test-title">it renders correctly VoiceScreen</div><div class="test-status">passed</div><div class="test-duration">0.471s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">VoiceScreen</div><div class="test-title">it renders render MicButton action</div><div class="test-status">passed</div><div class="test-duration">0.009s</div></div></div></div><div class="suite-consolelog"><div class="suite-consolelog-header">Console Log</div><div class="suite-consolelog-item"><pre class="suite-consolelog-item-origin">    at printWarning (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:72:30)
+    at error (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:46:7)
+    at captureCommitPhaseError (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:16376:5)
+    at safelyCallDestroy (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:12805:5)
+    at commitHookEffectListUnmount (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:12964:11)
+    at commitPassiveUnmountInsideDeletedTreeOnFiber (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:14592:11)
+    at commitPassiveUnmountEffectsInsideOfDeletedTree_begin (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:14539:5)
+    at commitPassiveUnmountEffects_begin (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:14447:11)
+    at commitPassiveUnmountEffects (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:14432:3)
+    at flushPassiveEffectsImpl (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:16247:3)
+    at flushPassiveEffects (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:16197:14)
+    at D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:16012:9
+    at flushActQueue (D:\react native project\task1\node_modules\react\cjs\react.development.js:2667:24)
+    at act (D:\react native project\task1\node_modules\react\cjs\react.development.js:2521:11)
+    at actImplementation (D:\react native project\task1\node_modules\@testing-library\react-native\src\act.ts:30:25)
+    at unmount (D:\react native project\task1\node_modules\@testing-library\react-native\src\render.tsx:97:13)
+    at fn (D:\react native project\task1\node_modules\@testing-library\react-native\src\cleanup.ts:9:32)
+    at Set.forEach (&lt;anonymous&gt;)
+    at forEach (D:\react native project\task1\node_modules\@testing-library\react-native\src\cleanup.ts:9:16)
+    at Object.&lt;anonymous&gt; (D:\react native project\task1\node_modules\@testing-library\react-native\src\index.ts:15:14)</pre><pre class="suite-consolelog-item-message">Warning: Internal React error: Attempted to capture a commit phase error inside a detached tree. This indicates a bug in React. Likely causes include deleting the same fiber more than once, committing an already-finished tree, or an inconsistent return pointer.
+
+Error message:
+
+TypeError: Cannot read properties of undefined (reading 'then')
+    at VoiceScreen (D:\react native project\task1\src\View\screen\VoiceScreen.js:13:36)</pre></div><div class="suite-consolelog-item"><pre class="suite-consolelog-item-origin">    at printWarning (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:72:30)
+    at error (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:46:7)
+    at captureCommitPhaseError (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:16376:5)
+    at safelyCallDestroy (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:12805:5)
+    at commitHookEffectListUnmount (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:12964:11)
+    at commitPassiveUnmountInsideDeletedTreeOnFiber (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:14592:11)
+    at commitPassiveUnmountEffectsInsideOfDeletedTree_begin (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:14539:5)
+    at commitPassiveUnmountEffects_begin (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:14447:11)
+    at commitPassiveUnmountEffects (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:14432:3)
+    at flushPassiveEffectsImpl (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:16247:3)
+    at flushPassiveEffects (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:16197:14)
+    at D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:16012:9
+    at flushActQueue (D:\react native project\task1\node_modules\react\cjs\react.development.js:2667:24)
+    at act (D:\react native project\task1\node_modules\react\cjs\react.development.js:2521:11)
+    at actImplementation (D:\react native project\task1\node_modules\@testing-library\react-native\src\act.ts:30:25)
+    at unmount (D:\react native project\task1\node_modules\@testing-library\react-native\src\render.tsx:97:13)
+    at fn (D:\react native project\task1\node_modules\@testing-library\react-native\src\cleanup.ts:9:32)
+    at Set.forEach (&lt;anonymous&gt;)
+    at forEach (D:\react native project\task1\node_modules\@testing-library\react-native\src\cleanup.ts:9:16)
+    at Object.&lt;anonymous&gt; (D:\react native project\task1\node_modules\@testing-library\react-native\src\index.ts:15:14)</pre><pre class="suite-consolelog-item-message">Warning: Internal React error: Attempted to capture a commit phase error inside a detached tree. This indicates a bug in React. Likely causes include deleting the same fiber more than once, committing an already-finished tree, or an inconsistent return pointer.
+
+Error message:
+
+TypeError: Cannot read properties of undefined (reading 'then')
+    at VoiceScreen (D:\react native project\task1\src\View\screen\VoiceScreen.js:13:36)</pre></div></div></div><div id="suite-3" class="suite-container"><input id="collapsible-2" type="checkbox" class="toggle" checked="checked"/><label for="collapsible-2"><div class="suite-info"><div class="suite-path">D:\react native project\task1\__tests__\components\AddPaymentComponent.test.js</div><div class="suite-time">2.788s</div></div></label><div class="suite-tests"><div class="test-result passed"><div class="test-info"><div class="test-suitename">AddPaymentComponent</div><div class="test-title">it renders correctly AddPaymentComponent</div><div class="test-status">passed</div><div class="test-duration">0.464s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">AddPaymentComponent</div><div class="test-title">Add new Expenses</div><div class="test-status">failed</div><div class="test-duration">1.12s</div></div><div class="failureMessages"> <pre class="failureMsg">Error: Unable to find an element with text: paid by
+
+&lt;View&gt;
+  &lt;View&gt;
+    &lt;Text&gt;
+      demo
+    &lt;/Text&gt;
+    &lt;View&gt;
+      &lt;View
+        accessible={true}
+      &gt;
+        Mocked Icon
+      &lt;/View&gt;
+      &lt;View
+        accessibilityState={
+          {
+            "disabled": true,
+          }
+        }
+        accessible={true}
+      &gt;
+        Mocked Icon
+      &lt;/View&gt;
+    &lt;/View&gt;
+  &lt;/View&gt;
+  &lt;Text&gt;
+    Paid Expense
+  &lt;/Text&gt;
+  &lt;View&gt;
+    &lt;View&gt;
+      Mocked Icon
+      &lt;Text&gt;
+        No data
+      &lt;/Text&gt;
+    &lt;/View&gt;
+  &lt;/View&gt;
+  &lt;Text&gt;
+    Add New Payment
+  &lt;/Text&gt;
+  &lt;TextInput
+    placeholder="Please Add the Expense Info"
+    value="Test Expense Info"
+  /&gt;
+  &lt;TextInput
+    placeholder="Enter The Expense Amount"
+    value="123.45"
+  /&gt;
+  &lt;TextInput
+    placeholder="Enter the Name"
+    value="Test Name"
+  /&gt;
+  &lt;View&gt;
+    &lt;View&gt;
+      &lt;View
+        accessible={true}
+      &gt;
+        &lt;Text&gt;
+          Miscellaneous
+        &lt;/Text&gt;
+        Mocked Icon
+      &lt;/View&gt;
+    &lt;/View&gt;
+  &lt;/View&gt;
+  &lt;View&gt;
+    &lt;View&gt;
+      &lt;View
+        accessible={true}
+      &gt;
+        &lt;Text&gt;
+          Attach file
+        &lt;/Text&gt;
+        Mocked Icon
+      &lt;/View&gt;
+    &lt;/View&gt;
+  &lt;/View&gt;
+  &lt;View&gt;
+    &lt;Text /&gt;
+    &lt;View
+      accessible={true}
+    &gt;
+      Mocked Icon
+    &lt;/View&gt;
+  &lt;/View&gt;
+  &lt;View&gt;
+    &lt;View
+      accessible={true}
+    &gt;
+      &lt;Text&gt;
+        Split Expense
+      &lt;/Text&gt;
+    &lt;/View&gt;
+    &lt;View
+      accessible={true}
+    &gt;
+      &lt;Text&gt;
+        Pay Now
+      &lt;/Text&gt;
+    &lt;/View&gt;
+  &lt;/View&gt;
+&lt;/View&gt;
+    at Object.&lt;anonymous&gt; (D:\react native project\task1\__tests__\components\AddPaymentComponent.test.js:147:18)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (D:\react native project\task1\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (D:\react native project\task1\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</pre></div></div></div><div class="suite-consolelog"><div class="suite-consolelog-header">Console Log</div><div class="suite-consolelog-item"><pre class="suite-consolelog-item-origin">    at printWarning (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:72:30)
+    at error (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:46:7)
+    at warnIfUpdatesNotWrappedWithActDEV (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:16677:9)
+    at scheduleUpdateOnFiber (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:14877:5)
+    at dispatchSetState (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:7510:7)
+    at Object.setExpenseData (D:\react native project\task1\src\ViewModel\screen\AddPaymentViewModel.js:99:5)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (D:\react native project\task1\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (D:\react native project\task1\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)</pre><pre class="suite-consolelog-item-message">Warning: An update to AddPaymentComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at route (D:\react native project\task1\src\View\components\AddPaymentComponent.js:15:31)</pre></div><div class="suite-consolelog-item"><pre class="suite-consolelog-item-origin">    at printWarning (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:72:30)
+    at error (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:46:7)
+    at captureCommitPhaseError (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:16376:5)
+    at safelyCallDestroy (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:12805:5)
+    at commitHookEffectListUnmount (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:12964:11)
+    at commitPassiveUnmountInsideDeletedTreeOnFiber (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:14592:11)
+    at commitPassiveUnmountEffectsInsideOfDeletedTree_begin (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:14539:5)
+    at commitPassiveUnmountEffects_begin (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:14447:11)
+    at commitPassiveUnmountEffects (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:14432:3)
+    at flushPassiveEffectsImpl (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:16247:3)
+    at flushPassiveEffects (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:16197:14)
+    at performSyncWorkOnRoot (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:15413:3)
+    at flushSyncCallbacks (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:2597:22)
+    at flushActQueue (D:\react native project\task1\node_modules\react\cjs\react.development.js:2667:24)
+    at act (D:\react native project\task1\node_modules\react\cjs\react.development.js:2521:11)
+    at actImplementation (D:\react native project\task1\node_modules\@testing-library\react-native\src\act.ts:30:25)
+    at unmount (D:\react native project\task1\node_modules\@testing-library\react-native\src\render.tsx:97:13)
+    at fn (D:\react native project\task1\node_modules\@testing-library\react-native\src\cleanup.ts:9:32)
+    at Set.forEach (&lt;anonymous&gt;)
+    at forEach (D:\react native project\task1\node_modules\@testing-library\react-native\src\cleanup.ts:9:16)
+    at Object.&lt;anonymous&gt; (D:\react native project\task1\node_modules\@testing-library\react-native\src\index.ts:15:14)</pre><pre class="suite-consolelog-item-message">Warning: Internal React error: Attempted to capture a commit phase error inside a detached tree. This indicates a bug in React. Likely causes include deleting the same fiber more than once, committing an already-finished tree, or an inconsistent return pointer.
+
+Error message:
+
+TypeError: Cannot read properties of undefined (reading 'then')
+    at route (D:\react native project\task1\src\View\components\AddPaymentComponent.js:15:31)</pre></div><div class="suite-consolelog-item"><pre class="suite-consolelog-item-origin">    at error (D:\react native project\task1\src\ViewModel\screen\AddPaymentViewModel.js:90:17)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (D:\react native project\task1\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (D:\react native project\task1\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</pre><pre class="suite-consolelog-item-message">Error saving data SyntaxError: "undefined" is not valid JSON
+    at JSON.parse (&lt;anonymous&gt;)
+    at parse (D:\react native project\task1\src\ViewModel\screen\AddPaymentViewModel.js:79:29)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (D:\react native project\task1\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (D:\react native project\task1\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</pre></div><div class="suite-consolelog-item"><pre class="suite-consolelog-item-origin">    at FakeTimers._checkFakeTimers (D:\react native project\task1\node_modules\@jest\fake-timers\build\modernFakeTimers.js:152:28)
+    at FakeTimers.advanceTimersByTime (D:\react native project\task1\node_modules\@jest\fake-timers\build\modernFakeTimers.js:93:14)
+    at Object.advanceTimersByTime (D:\react native project\task1\node_modules\jest-runtime\build\index.js:2027:26)
+    at Object.advanceTimersByTime (D:\react native project\task1\__tests__\components\AddPaymentComponent.test.js:144:10)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (D:\react native project\task1\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (D:\react native project\task1\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</pre><pre class="suite-consolelog-item-message">A function to advance timers was called but the timers APIs are not replaced with fake timers. Call `jest.useFakeTimers()` in this test file or enable fake timers for all tests by setting 'fakeTimers': {'enableGlobally': true} in Jest configuration file.
+Stack Trace:
+
+      142 |
+      143 |     // Simulate the time interval needed for the state update
+    &gt; 144 |     jest.advanceTimersByTime(5000); // Adjust the time interval as needed
+          |          ^
+      145 |
+      146 |     // Use waitFor to ensure the assertion happens after the state update
+      147 |     await waitFor(() =&gt; {
+
+      Error: 
+      at FakeTimers._checkFakeTimers (node_modules/@jest/fake-timers/build/modernFakeTimers.js:158:13)
+      at FakeTimers.advanceTimersByTime (node_modules/@jest/fake-timers/build/modernFakeTimers.js:93:14)
+      at Object.advanceTimersByTime (__tests__/components/AddPaymentComponent.test.js:144:10)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)</pre></div><div class="suite-consolelog-item"><pre class="suite-consolelog-item-origin">    at printWarning (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:72:30)
+    at error (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:46:7)
+    at captureCommitPhaseError (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:16376:5)
+    at safelyCallDestroy (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:12805:5)
+    at commitHookEffectListUnmount (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:12964:11)
+    at commitPassiveUnmountInsideDeletedTreeOnFiber (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:14592:11)
+    at commitPassiveUnmountEffectsInsideOfDeletedTree_begin (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:14539:5)
+    at commitPassiveUnmountEffects_begin (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:14447:11)
+    at commitPassiveUnmountEffects (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:14432:3)
+    at flushPassiveEffectsImpl (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:16247:3)
+    at flushPassiveEffects (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:16197:14)
+    at performSyncWorkOnRoot (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:15413:3)
+    at flushSyncCallbacks (D:\react native project\task1\node_modules\react-test-renderer\cjs\react-test-renderer.development.js:2597:22)
+    at flushActQueue (D:\react native project\task1\node_modules\react\cjs\react.development.js:2667:24)
+    at act (D:\react native project\task1\node_modules\react\cjs\react.development.js:2521:11)
+    at actImplementation (D:\react native project\task1\node_modules\@testing-library\react-native\src\act.ts:30:25)
+    at unmount (D:\react native project\task1\node_modules\@testing-library\react-native\src\render.tsx:97:13)
+    at fn (D:\react native project\task1\node_modules\@testing-library\react-native\src\cleanup.ts:9:32)
+    at Set.forEach (&lt;anonymous&gt;)
+    at forEach (D:\react native project\task1\node_modules\@testing-library\react-native\src\cleanup.ts:9:16)
+    at Object.&lt;anonymous&gt; (D:\react native project\task1\node_modules\@testing-library\react-native\src\index.ts:15:14)</pre><pre class="suite-consolelog-item-message">Warning: Internal React error: Attempted to capture a commit phase error inside a detached tree. This indicates a bug in React. Likely causes include deleting the same fiber more than once, committing an already-finished tree, or an inconsistent return pointer.
+
+Error message:
+
+TypeError: Cannot read properties of undefined (reading 'then')
+    at route (D:\react native project\task1\src\View\components\AddPaymentComponent.js:15:31)</pre></div></div></div></div></body></html>

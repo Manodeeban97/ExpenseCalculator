@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import Voice from '@react-native-voice/voice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { format } from 'date-fns';
+import {format} from 'date-fns';
 
 const VoiceViewModel = () => {
   const [isrecording, setIsRecording] = useState(false);
@@ -16,10 +16,15 @@ const VoiceViewModel = () => {
   const navigation = useNavigation();
 
   const handleDate = (event, selected) => {
-    const currentDate = selected || new Date();
-    const formattedDate = format(currentDate, 'MMM-dd-yyyy');
-    setDate(formattedDate);
-    setOpenCalendar(false);
+    if (event.type === 'dismissed') {
+      setDate('');
+      setOpenCalendar(false);
+    } else {
+      const currentDate = selected || new Date();
+      const formattedDate = format(currentDate, 'MMM-dd-yyyy');
+      setDate(formattedDate);
+      setOpenCalendar(false);
+    }
   };
 
   useEffect(() => {

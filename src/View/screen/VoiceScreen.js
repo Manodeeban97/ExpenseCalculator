@@ -6,7 +6,8 @@ import {VoiceStyles} from '../StyleSheet/VoiceStyle';
 import VoiceViewModel from '../../ViewModel/screen/VoiceViewModel';
 import {TextInput} from 'react-native';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
-import { handleVoice } from '../../Redux/Action';
+import {handleVoice} from '../../Redux/Action';
+import LottieView from 'lottie-react-native';
 
 const VoiceScreen = () => {
   const VoiceModel = VoiceViewModel();
@@ -51,11 +52,14 @@ const VoiceScreen = () => {
                 {
                   alignItems: 'center',
                   flexDirection: 'row',
+                  padding: 5,
+                  paddingRight: 15,
+                  paddingLeft: 13,
                   justifyContent: 'space-between',
                 },
               ]}>
               <TextInput
-                style={{color: 'black'}}
+                style={{color: 'black', fontSize: 16}}
                 value={VoiceModel.date}
                 onChangeText={text => VoiceModel.setDate(text)}
                 placeholderTextColor={'black'}
@@ -97,6 +101,24 @@ const VoiceScreen = () => {
         key={(item, index) => index.toString()}
         renderItem={({item, index}) => <VoiceModal item={item} index={index} />}
       /> */}
+        <View
+          style={{
+            width: '100%',
+            height: 100,
+            flexDirection: 'row',
+            justifyContent: 'center',
+          }}>
+          {VoiceModel.isrecording && (
+            <LottieView
+              // ref={animationRef}
+              resizeMode="cover"
+              style={{width: 100, height: 100, margin: 0, padding: 0}}
+              source={require('../../assets/Audio-animation.json')}
+              autoPlay
+              loop
+            />
+          )}
+        </View>
         <View style={VoiceStyles.VoiceFooter}>
           <TouchableOpacity
             style={VoiceStyles.AddButton}

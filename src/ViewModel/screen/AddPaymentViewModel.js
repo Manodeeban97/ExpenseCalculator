@@ -102,7 +102,7 @@ const AddPaymentViewModel = () => {
   const createAndSharePDF = async () => {
     try {
       const expense = expenseData.filter(item => item.id === listId);
-      const attachmentData = expenseData.map(item => item?.attachment);
+      const attachmentData = expense.map(item => item?.attachment);
       const htmlContent = await generateHTMLContent(expense, attachmentData);
 
       const options = {

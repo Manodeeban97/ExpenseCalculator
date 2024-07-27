@@ -8,7 +8,6 @@ import {
   StyleSheet,
 } from 'react-native';
 import {Icon} from 'react-native-elements';
-// import Icon from 'react-native-vector-icons/Ionicons';
 
 const CustomSelect = ({data, onSelect, defaultText}) => {
   const [modalVisible, setModalVisible] = useState(false);

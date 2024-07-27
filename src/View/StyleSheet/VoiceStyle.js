@@ -24,6 +24,7 @@ export const VoiceStyles = StyleSheet.create({
     gap: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    // backgroundColor:"blue"
   },
   FlatList: {
     display: 'flex',
@@ -59,5 +60,5 @@ export const VoiceStyles = StyleSheet.create({
     marginTop: 50,
     marginBottom: 50,
   },
-  expenseMainContainer: {height: '100%', padding: 30, gap: 80},
+  expenseMainContainer: {height: '100%', padding: 30},
 });

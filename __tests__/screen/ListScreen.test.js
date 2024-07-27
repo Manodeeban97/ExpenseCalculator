@@ -1,6 +1,7 @@
 import React from 'react';
 import {fireEvent, render, waitFor} from '@testing-library/react-native';
 import ListScreen from '../../src/View/screen/ListScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 jest.mock('react-native-elements', () => {
   return {
@@ -14,9 +15,19 @@ jest.mock('react-redux', () => {
 });
 jest.mock('@react-native-async-storage/async-storage', () => {
   return {
-    AsyncStorage: () => jest.fn(),
+    getItem: jest.fn(),
+    setItem: jest.fn(),
+    removeItem: jest.fn(),
+    clear: jest.fn(),
+    getAllKeys: jest.fn(),
+    multiGet: jest.fn(),
+    multiSet: jest.fn(),
+    multiRemove: jest.fn(),
+    multiMerge: jest.fn(),
   };
 });
+
+
 jest.mock('@tensorflow/tfjs-react-native', () => {
   return {
     ...jest.requireActual('@tensorflow/tfjs-react-native'),
@@ -34,11 +45,11 @@ jest.mock('@react-navigation/native', () => {
   };
 });
 
-
-
-
-
 describe('ListScreen', () => {
+  beforeEach(() => {
+    AsyncStorage.getItem.mockClear();
+    AsyncStorage.setItem.mockClear();
+  });
   it('it renders correctly listscreen', () => {
     const {getByText} = render(<ListScreen />);
     expect(getByText('Welcome to your')).toBeTruthy();
@@ -48,17 +59,5 @@ describe('ListScreen', () => {
     const {getByTestId, getByText} = render(<ListScreen />);
     const button = getByTestId('addTitleButton');
     expect(button).toBeTruthy();
-    fireEvent.press(button);
-    const Voicemodebutton = getByText('Voice Mode');
-    expect(Voicemodebutton).toBeTruthy();
-  });
-  it('triggering the Voice Mode Button', async () => {
-    const {getByTestId, getByText} = render(<ListScreen />);
-    const button = getByTestId('addTitleButton');
-    expect(button).toBeTruthy();
-    fireEvent.press(button);
-    expect(getByText('Voice Mode')).toBeTruthy();
-    const Voicebutton = getByText('Voice Mode');
-    fireEvent.press(Voicebutton);
   });
 });

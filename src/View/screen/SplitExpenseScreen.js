@@ -50,7 +50,7 @@ const SplitExpenseScreen = ({route}) => {
     <KeyboardAvoidingView
       style={{flex: 1}}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={50}>
+      keyboardVerticalOffset={-300}>
       <View style={SplitExpenseStyles.container}>
         <Text style={SplitExpenseStyles.header}>Split the Expenses</Text>
         <View style={SplitExpenseStyles.splitContainer}>

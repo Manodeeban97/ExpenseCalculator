@@ -13,6 +13,7 @@ export const ListStyle = StyleSheet.create({
     padding: 10,
     width: 150,
     backgroundColor: '#5d5bd4',
+    // backgroundColor: '#7080fd',
     borderRadius: 30,
     display: 'flex',
     flexDirection: 'row',

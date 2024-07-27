@@ -39,7 +39,7 @@ const CustomTextWithTooltip = ({text, maxWords}) => {
 
 const styles = StyleSheet.create({
   shortText: {
-    width: 300, // Adjust the width as needed
+    width: 300, 
     color: 'black',
   },
   modalOverlay: {

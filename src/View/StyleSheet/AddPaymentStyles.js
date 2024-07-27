@@ -2,7 +2,8 @@ import {StyleSheet} from 'react-native';
 
 export const AddPaymentStyle = StyleSheet.create({
   container: {
-    padding: 20,
+    marginTop:20,
+    padding: 16,
     backgroundColor: '#f5f5f5',
     flex: 1,
   },
@@ -17,8 +18,9 @@ export const AddPaymentStyle = StyleSheet.create({
   section: {
     backgroundColor: '#e6e6fa',
     padding: 10,
-    height: '25%',
+    height: '23%',
     borderRadius: 8,
+    justifyContent:"center"
   },
   sectionTitle: {
     color: 'black',
@@ -88,12 +90,14 @@ export const AddPaymentStyle = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    padding:10
   },
   button: {
-    backgroundColor: '#4b7bec',
+    backgroundColor: '#5d5bd4',
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',
+    borderRadius:25,
     flex: 1,
     marginHorizontal: 4,
   },
