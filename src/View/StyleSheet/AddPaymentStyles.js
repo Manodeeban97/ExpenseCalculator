@@ -90,12 +90,12 @@ export const AddPaymentStyle = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding:10
+    // padding:10
+    paddingTop:10
   },
   button: {
     backgroundColor: '#5d5bd4',
     padding: 16,
-    borderRadius: 8,
     alignItems: 'center',
     borderRadius:25,
     flex: 1,

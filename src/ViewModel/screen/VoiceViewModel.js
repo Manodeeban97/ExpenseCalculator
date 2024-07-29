@@ -3,6 +3,9 @@ import {useNavigation} from '@react-navigation/native';
 import Voice from '@react-native-voice/voice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {format} from 'date-fns';
+import {app, getRealmConfig, realmConfig} from '../../../realmConfig';
+import Realm from 'realm';
+import {loginAnonymous} from '../../../authentication';
 
 const VoiceViewModel = () => {
   const [isrecording, setIsRecording] = useState(false);
@@ -94,6 +97,31 @@ const VoiceViewModel = () => {
       }
     }
   };
+
+  // const handleAdd = async () => {
+  //   // console.log(app.currentUser,"newItem")
+  //   // console.log("handleAdd",new Realm.BSON.ObjectId())
+  //   console.log(title,date, 'hfhfhf');
+  //   if (title && date) {
+  //     const newItem = {
+  //       _id: new Realm.BSON.ObjectId(),
+  //       title,
+  //       date,
+  //       amount: 0,
+  //     };
+  //     try {
+  //       // const user = app.currentUser || (await loginAnonymous());
+  //       const realm = await Realm.open(realmConfig);
+  //       realm.write(() => {
+  //         console.log('AddList');
+  //         realm.create('expenselist', newItem);
+  //       });
+  //       navigation.navigate('ListScreen');
+  //     } catch (error) {
+  //       console.error('Error saving data', error);
+  //     }
+  //   }
+  // };
 
   return {
     onPressMic,
