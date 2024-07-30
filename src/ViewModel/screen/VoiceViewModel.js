@@ -3,9 +3,15 @@ import {useNavigation} from '@react-navigation/native';
 import Voice from '@react-native-voice/voice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {format} from 'date-fns';
-import {app, getRealmConfig, realmConfig} from '../../../realmConfig';
+import {
+  app,
+  ExpenseSchema,
+  getRealmConfig,
+  realmConfig,
+} from '../../../realmConfig';
 import Realm from 'realm';
 import {loginAnonymous} from '../../../authentication';
+import {useQuery, useRealm} from '@realm/react';
 
 const VoiceViewModel = () => {
   const [isrecording, setIsRecording] = useState(false);
@@ -15,6 +21,8 @@ const VoiceViewModel = () => {
   const [openCalendar, setOpenCalendar] = useState(false);
   // const [amount, setAmount] = useState('');
   const [step, setStep] = useState(0);
+  const realm = useRealm();
+  const expense = useQuery(ExpenseSchema);
 
   const navigation = useNavigation();
 
@@ -82,46 +90,49 @@ const VoiceViewModel = () => {
     Voice.onSpeechResults = event => setVoiceData(event.value[0]);
   };
 
-  const handleAdd = async () => {
-    if (title && date) {
-      const newItem = {id: Math.random(), title, date, amount: 0};
-
-      try {
-        const existingList = await AsyncStorage.getItem('list');
-        let list = JSON.parse(existingList) || [];
-        list.push(newItem);
-        await AsyncStorage.setItem('list', JSON.stringify(list));
-        navigation.navigate('ListScreen');
-      } catch (error) {
-        console.error('Error saving data', error);
-      }
-    }
-  };
-
   // const handleAdd = async () => {
-  //   // console.log(app.currentUser,"newItem")
-  //   // console.log("handleAdd",new Realm.BSON.ObjectId())
-  //   console.log(title,date, 'hfhfhf');
   //   if (title && date) {
-  //     const newItem = {
-  //       _id: new Realm.BSON.ObjectId(),
-  //       title,
-  //       date,
-  //       amount: 0,
-  //     };
+  //     const newItem = {id: Math.random(), title, date, amount: 0};
+
   //     try {
-  //       // const user = app.currentUser || (await loginAnonymous());
-  //       const realm = await Realm.open(realmConfig);
-  //       realm.write(() => {
-  //         console.log('AddList');
-  //         realm.create('expenselist', newItem);
-  //       });
+  //       const existingList = await AsyncStorage.getItem('list');
+  //       let list = JSON.parse(existingList) || [];
+  //       list.push(newItem);
+  //       await AsyncStorage.setItem('list', JSON.stringify(list));
   //       navigation.navigate('ListScreen');
   //     } catch (error) {
   //       console.error('Error saving data', error);
   //     }
   //   }
   // };
+  useEffect(() => {
+    realm.subscriptions.update(mutableSubs => {
+      mutableSubs.add(realm.objects(ExpenseSchema));
+    });
+  }, [realm]);
+
+  const handleAdd = async () => {
+    // console.log(app.currentUser,"newItem")
+    // console.log("handleAdd",new Realm.BSON.ObjectId())
+    console.log(title, date, 'hfhfhf');
+    if (title && date) {
+      const newItem = {
+        _id: new Realm.BSON.ObjectId(),
+        title,
+        date,
+        amount: 0,
+      };
+      try {
+        // const user = app.currentUser || (await loginAnonymous());
+        realm.write(() => {
+          realm.create('expenselist', newItem);
+        });
+        navigation.navigate('ListScreen');
+      } catch (error) {
+        console.error('Error saving data', error);
+      }
+    }
+  };
 
   return {
     onPressMic,
