@@ -27,7 +27,11 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <StatusBar translucent={true} backgroundColor={"transparent"} barStyle={"dark-content"} />
+      <StatusBar
+        translucent={true}
+        backgroundColor={'transparent'}
+        barStyle={'dark-content'}
+      />
       <NavigationContainer>
         <Stack.Navigator initialRouteName="ListScreen">
           <Stack.Screen

@@ -5,8 +5,14 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Share from 'react-native-share';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {generateHTMLContent} from '../../utils/PdfHelper';
+import {Expenselist, RealmContext} from '../models/Task';
+import { BSON } from 'realm';
+
+const {useQuery, useRealm} = RealmContext;
 
 const AddPaymentViewModel = () => {
+  const realm = useRealm();
+  const expenseData = useQuery(Expenselist);
   const [isrecording, setIsRecording] = useState(false);
   const [voiceData, setVoiceData] = useState('');
   const [expenseinfo, setExpenseinfo] = useState('');
@@ -16,7 +22,7 @@ const AddPaymentViewModel = () => {
   const [listId, setListID] = useState('');
   const [attachment, setAttachment] = useState(null);
   const [step, setStep] = useState(0);
-  const [expenseData, setExpenseData] = useState([]);
+  // const [expenseData, setExpenseData] = useState([]);
   const navigation = useNavigation();
 
   const SelectData = [
@@ -61,24 +67,53 @@ const AddPaymentViewModel = () => {
       }
     }
   };
+  // const handlePay = async () => {
+  //   if (expenseinfo && category && name && expAmount) {
+  //     const amount = parseInt(expAmount);
+  //     const newExpense = {
+  //       id: listId,
+  //       expenseinfo,
+  //       category,
+  //       name,
+  //       amount,
+  //       attachment,
+  //     };
+
+  //     try {
+  //       // Get the existing expenses from AsyncStorage
+  //       const existingExpenses = await AsyncStorage.getItem('expenses');
+  //       let expenses = JSON.parse(existingExpenses) || [];
+  //       expenses.push(newExpense);
+  //       await AsyncStorage.setItem('expenses', JSON.stringify(expenses));
+  //       navigation.navigate('ListScreen');
+
+  //       setExpenseinfo('');
+  //       setCategory('');
+  //       setAttachment(null);
+  //       setExpAmount('');
+  //       setName('');
+  //     } catch (error) {
+  //       console.error('Error saving data', error);
+  //     }
+  //   }
+  //   initialiseVoice();
+  // };
   const handlePay = async () => {
     if (expenseinfo && category && name && expAmount) {
       const amount = parseInt(expAmount);
       const newExpense = {
-        id: listId,
+        _id: new BSON.ObjectId(),
+        subID:listId,
         expenseinfo,
         category,
         name,
         amount,
-        attachment,
       };
 
       try {
-        // Get the existing expenses from AsyncStorage
-        const existingExpenses = await AsyncStorage.getItem('expenses');
-        let expenses = JSON.parse(existingExpenses) || [];
-        expenses.push(newExpense);
-        await AsyncStorage.setItem('expenses', JSON.stringify(expenses));
+        realm.write(() => {
+          realm.create('ExpenseList', newExpense);
+        });
         navigation.navigate('ListScreen');
 
         setExpenseinfo('');
@@ -96,7 +131,7 @@ const AddPaymentViewModel = () => {
   const fetchExpenses = async () => {
     const existingExpenses = await AsyncStorage.getItem('expenses');
     let expenses = JSON.parse(existingExpenses) || [];
-    setExpenseData(expenses);
+    // setExpenseData(expenses);
   };
 
   const createAndSharePDF = async () => {
@@ -125,6 +160,12 @@ const AddPaymentViewModel = () => {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    realm.subscriptions.update(mutableSubs => {
+      mutableSubs.add(realm.objects(Expenselist));
+    });
+  }, [realm]);
 
   return {
     initialiseVoice,

@@ -3,16 +3,14 @@ import {ActivityIndicator, SafeAreaView} from 'react-native';
 import {OpenRealmBehaviorType} from 'realm';
 import App from './App';
 import {useEffect, useState} from 'react';
-// import {RealmContext} from './models/Task';
 import { Realm } from 'realm';
-import { RealmContext } from './realmConfig';
+import { RealmContext } from './src/ViewModel/models/Task';
 
 const {RealmProvider} = RealmContext;
 
-function RealmWrapper() {
+function RealmWrapper(){
   const app = useApp();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
 
   useEffect(() => {
     const login = async () => {

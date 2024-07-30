@@ -1,0 +1,9 @@
+{
+    "appId": "expensecalculator-tjedhlr",
+    "appUrl": "https://services.cloud.mongodb.com/groups/66a7448642f88312eb2ca489/apps/66a86dd0fee379c1804aa906",
+    "baseUrl": "https://services.cloud.mongodb.com",
+    "clientApiBaseUrl": "https://ap-south-1.aws.services.cloud.mongodb.com",
+    "dataApiBaseUrl": "https://ap-south-1.aws.data.mongodb-api.com",
+    "dataExplorerLink": "https://cloud.mongodb.com/links/66a7448642f88312eb2ca489/explorer/expensecluster/database/collection/find",
+    "dataSourceName": "mongodb-atlas"
+}

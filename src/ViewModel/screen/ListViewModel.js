@@ -2,13 +2,22 @@ import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {RealmContext, Task} from '../models/Task';
+
+const {useQuery, useRealm} = RealmContext;
 
 const ListViewModel = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [listData, setListData] = useState([]);
+  // const [listData, setListData] = useState([]);
   const [explistData, setExpListData] = useState([]);
   const [matchId, setMatchId] = useState('');
   const listItemData = useSelector(state => state.listItem);
+
+  const listData = useQuery(Task);
+
+  // console.log(listData,"listdata")
+
+  // console.log(listData,"mano")
 
   const navigation = useNavigation();
 
@@ -16,8 +25,9 @@ const ListViewModel = () => {
     navigation.navigate('VoiceScreen');
   };
   const handleItemPress = item => {
+    console.log(item._id, 'nffjfjjgjgj');
     setMatchId(item.id);
-    navigation.navigate('AddPaymentScreen', {id: item.id, data: item});
+    navigation.navigate('AddPaymentScreen', {subID: item._id});
   };
 
   const handleUpdate = async id => {
@@ -49,7 +59,7 @@ const ListViewModel = () => {
       const expData = await AsyncStorage.getItem('expenses');
       let list = JSON.parse(listItemData) || [];
       let explist = JSON.parse(expData) || [];
-      setListData(list);
+      // setListData(list);
       setExpListData(explist);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -60,7 +70,7 @@ const ListViewModel = () => {
     handleItemPress,
     handleUpdate,
     fetchData,
-    setListData,
+    // setListData,
     modalVisible,
     listItemData,
     explistData,

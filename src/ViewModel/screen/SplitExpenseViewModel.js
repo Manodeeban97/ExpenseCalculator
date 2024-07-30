@@ -23,7 +23,7 @@ const SplitExpenseViewModel = () => {
   const fetchExpenses = async () => {
     const existingExpenses = await AsyncStorage.getItem('expenses');
     let expenses = JSON.parse(existingExpenses) || [];
-    console.log(expenses, 'data');
+    // console.log(expenses, 'data');
 
     setExpenseDataSource(expenses);
     setExpenses(expenses);

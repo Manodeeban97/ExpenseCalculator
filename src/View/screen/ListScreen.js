@@ -24,18 +24,6 @@ const ListScreen = () => {
     ListModel.fetchData();
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      try {
-        if (ListModel.listData) {
-          ListModel.fetchData();
-        }
-      } catch (error) {
-        console.error('Error reading value from AsyncStorage', error);
-      }
-    }, 500);
-    return () => clearInterval(interval);
-  }, [ListModel.listData]);
 
   return (
     <View style={ListStyle.container} data-testid="listscreen">

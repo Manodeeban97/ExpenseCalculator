@@ -1,11 +1,15 @@
-import {AppProvider, UserProvider} from '@realm/react';
 import React from 'react';
+import {ExpenseSchema} from './realmConfig';
+import {AppProvider, UserProvider, RealmProvider} from '@realm/react';
+import {appId, baseUrl} from './atlasConfig.json';
+import App from './App';
+import {ActivityIndicator, View} from 'react-native';
 import RealmWrapper from './RealmWrapper';
 
 function AppWrapper() {
+
   return (
-    // IMPORTANT: ADD YOUR APP ID BELOW
-    <AppProvider id={'expensecalculator-rtpvwcz'}>
+    <AppProvider id={appId} baseUrl={baseUrl}>
       <UserProvider fallback={<RealmWrapper />}>
         <RealmWrapper />
       </UserProvider>
@@ -14,3 +18,11 @@ function AppWrapper() {
 }
 
 export default AppWrapper;
+
+{
+  /* <AppProvider id={'expensecalculator-tjedhlr'}>
+<UserProvider fallback={<RealmWrapper />}>
+  <RealmWrapper />
+</UserProvider>
+</AppProvider> */
+}

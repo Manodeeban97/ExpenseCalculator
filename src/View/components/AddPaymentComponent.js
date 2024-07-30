@@ -14,7 +14,7 @@ import LottieView from 'lottie-react-native';
 
 const AddPaymentComponent = ({route}) => {
   const AddPaymentModel = AddPaymentViewModel();
-  const {id, data} = route.params;
+  const {subID} = route.params;
 
   useEffect(() => {
     AddPaymentModel.initialiseVoice();
@@ -25,8 +25,10 @@ const AddPaymentComponent = ({route}) => {
 
   useEffect(() => {
     AddPaymentModel.fetchExpenses();
-    AddPaymentModel.setListID(id);
+    AddPaymentModel.setListID(subID);
   }, []);
+
+  // console.log(AddPaymentModel.expenseData,"expenseData")
 
 
   return (
@@ -45,7 +47,7 @@ const AddPaymentComponent = ({route}) => {
           <TouchableOpacity
             onPress={AddPaymentModel.createAndSharePDF}
             disabled={
-              AddPaymentModel.expenseData.filter(item => item.id === id) < 1
+              AddPaymentModel.expenseData.filter(item => item.id === subID) < 1
             }>
             <Icon name="share" type="entypo" color="#5d5bd4" />
           </TouchableOpacity>
@@ -54,14 +56,14 @@ const AddPaymentComponent = ({route}) => {
 
       <Text style={AddPaymentStyle.sectionTitle}>Paid Expense</Text>
       <View style={AddPaymentStyle.section}>
-        {AddPaymentModel.expenseData.filter(item => item.id === id).length !==
+        {AddPaymentModel.expenseData.filter(item => item.id === subID).length !==
         0 ? (
           <FlatList
             style={{height: 500}}
             data={AddPaymentModel.expenseData}
             keyExtractor={(item, id) => id.toString()}
             renderItem={({item}) =>
-              item.id !== id ? null : <PaidExpenseList item={item} />
+              item.id !== subID ? null : <PaidExpenseList item={item} />
             }
           />
         ) : (
@@ -144,8 +146,8 @@ const AddPaymentComponent = ({route}) => {
           style={AddPaymentStyle.button}
           onPress={() =>
             AddPaymentModel.navigation.navigate('SplitExpenseScreen', {
-              ExpenseId: id,
-              expenseinfo: data?.title,
+              ExpenseId: subID,
+              // expenseinfo: data?.title,
             })
           }>
           <Text style={AddPaymentStyle.buttonText}>Split Expense</Text>
