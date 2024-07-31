@@ -2,18 +2,21 @@ import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {RealmContext, Task} from '../models/Task';
+import {Expenselist, RealmContext, Task} from '../models/Task';
 
 const {useQuery, useRealm} = RealmContext;
 
 const ListViewModel = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const realm = useRealm();
+  const expense = useQuery(Expenselist);
   // const [listData, setListData] = useState([]);
   const [explistData, setExpListData] = useState([]);
   const [matchId, setMatchId] = useState('');
   const listItemData = useSelector(state => state.listItem);
 
   const listData = useQuery(Task);
+
 
   // console.log(listData,"listdata")
 
@@ -25,34 +28,47 @@ const ListViewModel = () => {
     navigation.navigate('VoiceScreen');
   };
   const handleItemPress = item => {
-    console.log(item._id, 'nffjfjjgjgj');
     setMatchId(item.id);
     navigation.navigate('AddPaymentScreen', {subID: item._id});
   };
 
-  const handleUpdate = async id => {
-    try {
-      const listString = await AsyncStorage.getItem('list');
-      const list = listString ? JSON.parse(listString) : [];
-      const data = explistData
-        ?.filter(item => item.id === id)
-        .map(item => item.amount)
-        .reduce((acc, curr) => {
-          return acc + curr;
-        }, 0);
+  // const handleUpdate = async id => {
+  //   try {
+  //     const listString = await AsyncStorage.getItem('list');
+  //     const list = listString ? JSON.parse(listString) : [];
+  //     const data = explistData
+  //       ?.filter(item => item.id === id)
+  //       .map(item => item.amount)
+  //       .reduce((acc, curr) => {
+  //         return acc + curr;
+  //       }, 0);
 
-      const updatedList = list.map(item => {
-        if (item.id === id) {
-          return {...item, amount: data};
-        }
-        return item;
-      });
+  //     const updatedList = list.map(item => {
+  //       if (item.id === id) {
+  //         return {...item, amount: data};
+  //       }
+  //       return item;
+  //     });
 
-      await AsyncStorage.setItem('list', JSON.stringify(updatedList));
-    } catch (error) {
-      console.log('Error updating list in local storage: ', error);
-    }
-  };
+  //     await AsyncStorage.setItem('list', JSON.stringify(updatedList));
+  //   } catch (error) {
+  //     console.log('Error updating list in local storage: ', error);
+  //   }
+  // };
+  // const handleUpdate = async () => {
+  //   try {
+  //     realm.write(() => {
+  //       // Update the task with the specified _id
+  //       realm.create(
+  //         'Task',
+  //         {_id: new BSON.ObjectId(matchId), amount: totalAmount},
+  //         'modified',
+  //       );
+  //     });
+  //   } catch (error) {
+  //     console.log('Error updating list in local storage: ', error);
+  //   }
+  // };
   const fetchData = async () => {
     try {
       const listItemData = await AsyncStorage.getItem('list');
@@ -68,7 +84,7 @@ const ListViewModel = () => {
   return {
     viewModal,
     handleItemPress,
-    handleUpdate,
+    // handleUpdate,
     fetchData,
     // setListData,
     modalVisible,

@@ -1,9 +1,6 @@
 import React from 'react';
-import {ExpenseSchema} from './realmConfig';
-import {AppProvider, UserProvider, RealmProvider} from '@realm/react';
+import {AppProvider, UserProvider} from '@realm/react';
 import {appId, baseUrl} from './atlasConfig.json';
-import App from './App';
-import {ActivityIndicator, View} from 'react-native';
 import RealmWrapper from './RealmWrapper';
 
 function AppWrapper() {
@@ -18,11 +15,3 @@ function AppWrapper() {
 }
 
 export default AppWrapper;
-
-{
-  /* <AppProvider id={'expensecalculator-tjedhlr'}>
-<UserProvider fallback={<RealmWrapper />}>
-  <RealmWrapper />
-</UserProvider>
-</AppProvider> */
-}

@@ -14,11 +14,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ListScreen = () => {
   const ListModel = ListViewModel();
-  useEffect(() => {
-    if (ListModel.explistData) {
-      ListModel.handleUpdate(ListModel.matchId);
-    }
-  }, [ListModel.explistData.length]);
+  // useEffect(() => {
+  //   if (ListModel.explistData) {
+  //     ListModel.handleUpdate(ListModel.matchId);
+  //   }
+  // }, [ListModel.explistData.length]);
 
   useEffect(() => {
     ListModel.fetchData();

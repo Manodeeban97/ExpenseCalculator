@@ -6,7 +6,7 @@ import Share from 'react-native-share';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {generateHTMLContent} from '../../utils/PdfHelper';
 import {Expenselist, RealmContext} from '../models/Task';
-import { BSON } from 'realm';
+import {BSON} from 'realm';
 
 const {useQuery, useRealm} = RealmContext;
 
@@ -24,6 +24,8 @@ const AddPaymentViewModel = () => {
   const [step, setStep] = useState(0);
   // const [expenseData, setExpenseData] = useState([]);
   const navigation = useNavigation();
+  // const expense = expenseData.filtered('subID == $0', listId);
+  // const totalAmount = expense.sum('amount');
 
   const SelectData = [
     {label: 'Miscellaneous', value: 'miscellaneous'},
@@ -98,12 +100,31 @@ const AddPaymentViewModel = () => {
   //   }
   //   initialiseVoice();
   // };
+  const handleUpdate = async () => {
+    try {
+      if (listId !== '') {
+        const expense = expenseData.filtered('subID == $0', listId);
+        const totalAmount = expense.sum('amount');
+        realm.write(() => {
+          // Update the task with the specified _id
+          realm.create(
+            'Task',
+            {_id: new BSON.ObjectId(listId), amount: totalAmount},
+            'modified',
+          );
+        });
+      }
+    } catch (error) {
+      console.log('Error updating list in local storage: ', error);
+    }
+  };
+
   const handlePay = async () => {
     if (expenseinfo && category && name && expAmount) {
       const amount = parseInt(expAmount);
       const newExpense = {
         _id: new BSON.ObjectId(),
-        subID:listId,
+        subID: listId,
         expenseinfo,
         category,
         name,
@@ -114,6 +135,7 @@ const AddPaymentViewModel = () => {
         realm.write(() => {
           realm.create('ExpenseList', newExpense);
         });
+        handleUpdate();
         navigation.navigate('ListScreen');
 
         setExpenseinfo('');
@@ -136,7 +158,7 @@ const AddPaymentViewModel = () => {
 
   const createAndSharePDF = async () => {
     try {
-      const expense = expenseData.filter(item => item.id === listId);
+      const expense = expenseData.filtered('subID == $0', listId);
       const attachmentData = expense.map(item => item?.attachment);
       const htmlContent = await generateHTMLContent(expense, attachmentData);
 

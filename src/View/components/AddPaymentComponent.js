@@ -11,10 +11,22 @@ import Voice from '@react-native-voice/voice';
 import AddPaymentViewModel from '../../ViewModel/screen/AddPaymentViewModel';
 import {AddPaymentStyle} from '../StyleSheet/AddPaymentStyles';
 import LottieView from 'lottie-react-native';
+import {Expenselist, RealmContext, Task} from '../../ViewModel/models/Task';
+
+const {useQuery, useRealm} = RealmContext;
 
 const AddPaymentComponent = ({route}) => {
-  const AddPaymentModel = AddPaymentViewModel();
   const {subID} = route.params;
+  const expense = useQuery(Expenselist);
+  const listdata = useQuery(Task);
+
+  const expenseData = expense.filtered('subID == $0', subID);
+  const totalAmount = expenseData.sum('amount');
+
+  const AddpageTitle = listdata.filtered('_id == $0', subID);
+  // console.log(totalAmount, 'mano');
+
+  const AddPaymentModel = AddPaymentViewModel();
 
   useEffect(() => {
     AddPaymentModel.initialiseVoice();
@@ -30,7 +42,6 @@ const AddPaymentComponent = ({route}) => {
 
   // console.log(AddPaymentModel.expenseData,"expenseData")
 
-
   return (
     <View style={AddPaymentStyle.container}>
       <View
@@ -39,16 +50,14 @@ const AddPaymentComponent = ({route}) => {
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>
-        <Text style={AddPaymentStyle.title}>demo</Text>
+        <Text style={AddPaymentStyle.title}>{AddpageTitle[0].title}</Text>
         <View style={{flexDirection: 'row', gap: 20}}>
           <TouchableOpacity>
             <Icon name="picture-as-pdf" type="materialicons" color="#5d5bd4" />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={AddPaymentModel.createAndSharePDF}
-            disabled={
-              AddPaymentModel.expenseData.filter(item => item.id === subID) < 1
-            }>
+            disabled={AddPaymentModel.expenseData < 1}>
             <Icon name="share" type="entypo" color="#5d5bd4" />
           </TouchableOpacity>
         </View>
@@ -56,15 +65,12 @@ const AddPaymentComponent = ({route}) => {
 
       <Text style={AddPaymentStyle.sectionTitle}>Paid Expense</Text>
       <View style={AddPaymentStyle.section}>
-        {AddPaymentModel.expenseData.filter(item => item.id === subID).length !==
-        0 ? (
+        {expenseData.length !== 0 ? (
           <FlatList
             style={{height: 500}}
-            data={AddPaymentModel.expenseData}
+            data={expenseData}
             keyExtractor={(item, id) => id.toString()}
-            renderItem={({item}) =>
-              item.id !== subID ? null : <PaidExpenseList item={item} />
-            }
+            renderItem={({item}) => <PaidExpenseList item={item} />}
           />
         ) : (
           <View style={{alignItems: 'center'}}>
@@ -147,7 +153,7 @@ const AddPaymentComponent = ({route}) => {
           onPress={() =>
             AddPaymentModel.navigation.navigate('SplitExpenseScreen', {
               ExpenseId: subID,
-              // expenseinfo: data?.title,
+              expenseinfo: AddpageTitle[0].title,
             })
           }>
           <Text style={AddPaymentStyle.buttonText}>Split Expense</Text>

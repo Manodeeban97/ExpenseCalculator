@@ -11,40 +11,51 @@ import {
 import {Icon} from 'react-native-elements';
 import SplitExpenseViewModel from '../../ViewModel/screen/SplitExpenseViewModel';
 import {SplitExpenseStyles} from '../StyleSheet/SplitExpenseStyles';
+import {Expenselist, RealmContext} from '../../ViewModel/models/Task';
+
+const {useQuery, useRealm} = RealmContext;
 
 const SplitExpenseScreen = ({route}) => {
   const {ExpenseId, expenseinfo} = route.params;
+
+  // const expense = useQuery(Expenselist);
+
+  // const expenseData = expense.filtered('subID == $0', ExpenseId);
+  // const totalAmount = expenseData.sum('amount');
+  // const SplitAmount = (totalAmount / expenseData.length).toFixed(0);
   const SplitEXpenseModel = SplitExpenseViewModel();
 
   useEffect(() => {
     SplitEXpenseModel.setExpenseId(ExpenseId);
     SplitEXpenseModel.fetchExpenses();
-  }, []);
+  }, [ExpenseId]);
 
-  const renderItem = ({item, index}) => (
-    <View style={SplitExpenseStyles.row}>
-      <TextInput
-        style={SplitExpenseStyles.input}
-        value={item.name}
-        onChangeText={text => SplitEXpenseModel.updateName(index, text)}
-        editable={item.isNew}
-      />
-      <TextInput
-        style={SplitExpenseStyles.input}
-        value={
-          item.isNew
-            ? SplitEXpenseModel.splitAmount
-            : `-${item.amount - SplitEXpenseModel.splitAmount}`
-        }
-        editable={false}
-      />
-      <TextInput
-        style={SplitExpenseStyles.input}
-        value={item.isNew ? '0' : item.amount.toString()}
-        editable={false}
-      />
-    </View>
-  );
+  const renderItem = ({item, index}) => {
+    return (
+      <View style={SplitExpenseStyles.row}>
+        <TextInput
+          style={SplitExpenseStyles.input}
+          value={item.name}
+          onChangeText={text => SplitEXpenseModel.updateName(index, text)}
+          editable={item.isNew}
+        />
+        <TextInput
+          style={SplitExpenseStyles.input}
+          value={
+            item.isNew
+              ? SplitEXpenseModel.splitAmount
+              : `-${item.amount - SplitEXpenseModel.splitAmount}`
+          }
+          editable={false}
+        />
+        <TextInput
+          style={SplitExpenseStyles.input}
+          value={item.isNew ? '0' : item.amount.toString()}
+          editable={false}
+        />
+      </View>
+    );
+  };
 
   return (
     <KeyboardAvoidingView
@@ -62,9 +73,7 @@ const SplitExpenseScreen = ({route}) => {
           </View>
           <View style={{height: '30%'}}>
             <FlatList
-              data={SplitEXpenseModel.expenseDataSource.filter(
-                item => item.id === ExpenseId,
-              )}
+              data={SplitEXpenseModel.expenseDataSource}
               renderItem={renderItem}
               keyExtractor={(item, index) => index.toString()}
               contentContainerStyle={{padding: 10}}

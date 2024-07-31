@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import Voice from '@react-native-voice/voice';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {format} from 'date-fns';
 import {RealmContext, Task} from '../models/Task';
 import {BSON} from 'realm';
 
-const {useQuery, useRealm} = RealmContext;
+const {useRealm} = RealmContext;
 
 const VoiceViewModel = () => {
   const realm = useRealm();
@@ -82,7 +81,6 @@ const VoiceViewModel = () => {
     Voice.onSpeechEnd = () => setIsRecording(false);
     Voice.onSpeechResults = event => setVoiceData(event.value[0]);
   };
-
 
   const handleAdd = async () => {
     if (title && date) {

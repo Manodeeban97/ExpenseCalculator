@@ -1,38 +1,53 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Share from 'react-native-share';
+import {Expenselist, RealmContext} from '../models/Task';
+
+const {useQuery, useRealm} = RealmContext;
 
 const SplitExpenseViewModel = () => {
   const [results, setResults] = useState([]);
   const [expenseId, setExpenseId] = useState('');
   const [expenseDataSource, setExpenseDataSource] = useState([]);
   const [expenses, setExpenses] = useState(expenseDataSource);
+  const [totalAmount, setTotalAmount] = useState(0);
 
-  const totalAmount = expenses
-    .filter(item => item.id === expenseId)
-    .map(item => item.amount)
-    .reduce((acc, curr) => {
-      return acc + curr;
-    }, 0);
+  const expense = useQuery(Expenselist);
 
-  const splitAmount = (
-    totalAmount / expenseDataSource.filter(item => item.id === expenseId).length
-  ).toFixed(0);
+  // console.log(expenseId, 'hghghghguh');
+
+  useEffect(() => {
+    if (expenseId !== '') {
+      const expenseData = expense.filtered('subID == $0', expenseId);
+      const totalAmount = expenseData.sum('amount');
+      setTotalAmount(totalAmount);
+      setExpenseDataSource(expenseData);
+    }
+  }, [expenseId]);
+
+  const splitAmount = (totalAmount / expenseDataSource.length).toFixed(0);
+  console.log(splitAmount, 'newdata');
+
+  // const totalAmount = expenses
+  //   .filter(item => item.id === expenseId)
+  //   .map(item => item.amount)
+  //   .reduce((acc, curr) => {
+  //     return acc + curr;s
 
   const fetchExpenses = async () => {
     const existingExpenses = await AsyncStorage.getItem('expenses');
     let expenses = JSON.parse(existingExpenses) || [];
     // console.log(expenses, 'data');
 
-    setExpenseDataSource(expenses);
+    // setExpenseDataSource(expenses);
     setExpenses(expenses);
   };
 
   const addNewRow = () => {
     setExpenseDataSource([
       ...expenseDataSource,
-      {id: expenseId, amount: parseFloat(splitAmount), isNew: true},
+      {_id: expenseId, amount: parseFloat(splitAmount), isNew: true},
     ]);
   };
 
@@ -46,29 +61,29 @@ const SplitExpenseViewModel = () => {
   };
 
   const updateName = (index, name) => {
-    const updatedExpenses = expenseDataSource
-      .filter(item => item.id === expenseId)
-      .map((expense, i) => {
-        if (i === index && expense.isNew) {
-          return {...expense, name};
-        }
-        return expense;
-      });
+    // console.log(name, 'updatename');
+    const updatedExpenses = expenseDataSource.map((expense, i) => {
+      if (i === index && expense.isNew) {
+        return {...expense, name};
+      }
+      return expense;
+    });
     setExpenseDataSource(updatedExpenses);
   };
 
-  const expenseresults = expenseDataSource
-    .filter(item => item.id === expenseId)
-    .map(item => {
-      const balance = item.isNew
-        ? splitAmount
-        : (item.amount - splitAmount).toFixed(0);
-      return {
-        name: item.name || 'Unnamed',
-        paid: item.isNew ? 0 : item.amount,
-        balance: parseFloat(balance),
-      };
-    });
+  const expenseresults = expenseDataSource.map(item => {
+    const balance = item.isNew
+      ? splitAmount
+      : (item.amount - splitAmount).toFixed(0);
+    // console.log(item.amount - splitAmount,"balance")
+    return {
+      name: item.name || 'Unnamed',
+      paid: item.isNew ? 0 : item.amount,
+      balance: parseFloat(balance),
+    };
+  });
+
+  // console.log(expenseDataSource,"expenseresults");
 
   const calculateResults = () => {
     const paidUser = expenseresults.filter(item => item.paid > 0);
