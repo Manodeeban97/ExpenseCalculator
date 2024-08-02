@@ -11,6 +11,7 @@ import {Icon} from 'react-native-elements';
 import ListViewModel from '../../ViewModel/screen/ListViewModel';
 import {ListStyle} from '../StyleSheet/ListStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {OfflineModeButton} from '../components/OfflineButton';
 
 const ListScreen = () => {
   const ListModel = ListViewModel();
@@ -23,7 +24,6 @@ const ListScreen = () => {
   useEffect(() => {
     ListModel.fetchData();
   }, []);
-
 
   return (
     <View style={ListStyle.container} data-testid="listscreen">
@@ -78,7 +78,14 @@ const ListScreen = () => {
         )}
       />
 
-      <View style={{alignSelf: 'flex-end'}}>
+      <View
+        style={{
+          padding:5,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          gap:50
+        }}>
+        <OfflineModeButton />
         <TouchableOpacity
           accessibilityLabel="Add Title Button"
           accessible={true}
@@ -89,7 +96,6 @@ const ListScreen = () => {
           <Text style={{padding: 10, color: 'white'}}>Add Title</Text>
         </TouchableOpacity>
       </View>
-      
     </View>
   );
 };

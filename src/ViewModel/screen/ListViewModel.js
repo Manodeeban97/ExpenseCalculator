@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -17,6 +17,9 @@ const ListViewModel = () => {
 
   const listData = useQuery(Task);
 
+  useEffect(() => {
+    realm.syncSession.pause();
+  }, []);
 
   // console.log(listData,"listdata")
 

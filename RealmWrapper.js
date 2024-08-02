@@ -20,6 +20,7 @@ function RealmWrapper(){
     };
     login();
   }, [app]);
+  
 
   return (
     <SafeAreaView style={{flex: 1}}>

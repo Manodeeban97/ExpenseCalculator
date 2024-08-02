@@ -86,11 +86,13 @@ const AddPaymentComponent = ({route}) => {
         style={AddPaymentStyle.input}
         onChangeText={text => AddPaymentModel.setExpenseinfo(text)}
         value={AddPaymentModel.expenseinfo}
+        onFocus={() => AddPaymentModel.handleFocus(1)}
         placeholderTextColor={'black'}
         placeholder="Please Add the Expense Info"
       />
       <TextInput
         style={AddPaymentStyle.input}
+        onFocus={() => AddPaymentModel.handleFocus(2)}
         onChangeText={text => AddPaymentModel.setExpAmount(text)}
         value={AddPaymentModel.expAmount}
         placeholderTextColor={'black'}
@@ -98,6 +100,7 @@ const AddPaymentComponent = ({route}) => {
       />
       <TextInput
         style={AddPaymentStyle.input}
+        onFocus={() => AddPaymentModel.handleFocus(3)}
         onChangeText={text => AddPaymentModel.setName(text)}
         value={AddPaymentModel.name}
         placeholderTextColor={'black'}

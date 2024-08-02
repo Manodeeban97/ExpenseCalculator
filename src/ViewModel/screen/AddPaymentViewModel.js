@@ -21,7 +21,8 @@ const AddPaymentViewModel = () => {
   const [category, setCategory] = useState('');
   const [listId, setListID] = useState('');
   const [attachment, setAttachment] = useState(null);
-  const [step, setStep] = useState(0);
+  const [currentInput, setCurrentInput] = useState(0);
+  const [dataSet, setDataSet] = useState(false);
   // const [expenseData, setExpenseData] = useState([]);
   const navigation = useNavigation();
   // const expense = expenseData.filtered('subID == $0', listId);
@@ -41,16 +42,20 @@ const AddPaymentViewModel = () => {
     Voice.onSpeechResults = event => setVoiceData(event.value[0]);
   };
 
+
   useEffect(() => {
-    if (step === 1) {
-      setExpenseinfo(voiceData);
-    } else if (step === 2) {
-      setExpAmount(voiceData);
-    } else if (step === 3) {
-      setName(voiceData);
+    if (currentInput && !dataSet) {
+      if (currentInput === 1) {
+       setExpenseinfo(voiceData);
+      } else if (currentInput === 2) {
+        setExpAmount(voiceData);
+      } else if (currentInput === 3) {
+        setName(voiceData);
+      }
+      setDataSet(true);
     }
-    setStep(prev => (prev + 1) % 4);
-  }, [voiceData]);
+  }, [currentInput, voiceData]);
+  
 
   const onPressMic = async () => {
     if (isrecording) {
@@ -183,6 +188,12 @@ const AddPaymentViewModel = () => {
     }
   };
 
+  const handleFocus = (inputNumber) => {
+    setCurrentInput(inputNumber);
+    setDataSet(false);
+  };
+  
+
   useEffect(() => {
     realm.subscriptions.update(mutableSubs => {
       mutableSubs.add(realm.objects(Expenselist));
@@ -210,6 +221,9 @@ const AddPaymentViewModel = () => {
     setExpenseinfo,
     setExpAmount,
     setName,
+    setCurrentInput,
+    setDataSet,
+    handleFocus
   };
 };
 
